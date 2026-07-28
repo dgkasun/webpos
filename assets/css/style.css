@@ -53,3 +53,53 @@ button {
     background: #f8dddd;
     border-left: 4px solid #b42318;
 }
+
+/* categories */
+textarea {
+    width: 100%;
+    padding: 12px;
+    font-family: inherit;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    resize: vertical;
+}
+
+.page-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 20px;
+    margin-bottom: 30px;
+}
+
+.success {
+    padding: 12px;
+    background: #e4f5e8;
+    border-left: 4px solid #2f8f46;
+}
+
+hr {
+    margin: 35px 0;
+    border: 0;
+    border-top: 1px solid #ddd;
+}
+
+.table-wrapper {
+    overflow-x: auto;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+th,
+td {
+    padding: 12px;
+    border-bottom: 1px solid #ddd;
+    text-align: left;
+}
+
+th {
+    background: #f4f6f8;
+}
