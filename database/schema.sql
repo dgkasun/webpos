@@ -26,7 +26,8 @@ CREATE TABLE products (
     name VARCHAR(150) NOT NULL,
     cost_price DECIMAL(10,2) NOT NULL,
     selling_price DECIMAL(10,2) NOT NULL,
-    stock_quantity INT NOT NULL DEFAULT 0
+    stock_quantity INT NOT NULL DEFAULT 0,
+    is_active TINYINT(1) NOT NULL DEFAULT 1
 
     FOREIGN KEY (category_id)
         REFERENCES categories(id)
