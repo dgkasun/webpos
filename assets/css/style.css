@@ -167,3 +167,7 @@ table input[type="number"] {
     margin: 6px 0;
 }
 
+/* edit catgegory */
+input[type=checkbox] {
+    width: unset;
+}

@@ -42,7 +42,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 }
 
 $catQuery = $conn->query(
-    'SELECT id, name, description
+    'SELECT id, name, description, is_active
      FROM categories
      ORDER BY name ASC'
 );
@@ -104,17 +104,21 @@ $categories = $catQuery->fetchAll(PDO::FETCH_ASSOC);
                 <table>
                     <thead>
                         <tr>
-                            <th>ID</th>
+                            <!-- <th>ID</th> -->
                             <th>Category</th>
                             <th>Description</th>
+                            <th>Status</th>
+                            <th>Action</th>
                         </tr>
                     </thead>
                     <tbody>
                         <?php foreach ($categories as $category): ?>
                             <tr>
-                                <td><?= (int) $category['id'] ?></td>
+                                <!--<td><?= $category['id'] ?></td>-->
                                 <td><?= $category['name'] ?></td>
                                 <td><?= $category['description'] ?? '' ?></td>
+                                <td><?= $category['is_active'] ? 'Active' : 'Inactive' ?></td>
+                                <td><a href="edit-category.php?id=<?= (int) $category['id'] ?>">Edit</a></td>
                             </tr>
                         <?php endforeach; ?>
                     </tbody>
