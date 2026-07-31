@@ -37,6 +37,7 @@ if (!isset($_SESSION['user_id'])) {
             <li><a href="products.php">Product</a></li>
             <li><a href="sales.php">Sales</a></li>
             <li><a href="pos.php">POS</a></li>
+            <li><a href="sales-history.php">Sales History</a></li>
         </ul>
 
         <a href="logout.php">Logout</a>

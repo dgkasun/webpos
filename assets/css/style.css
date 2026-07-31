@@ -150,3 +150,20 @@ select {
 table input[type="number"] {
     width: 80px;
 }
+
+/* receipt */
+.receipt-actions {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+}
+
+.receipt-details {
+    margin-bottom: 25px;
+}
+
+.receipt-details p {
+    margin: 6px 0;
+}
+
