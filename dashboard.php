@@ -5,44 +5,101 @@ if (!isset($_SESSION['user_id'])) {
     header('Location: login.php');
     exit;
 }
+
+require_once __DIR__ . '/config/database.php';
+
+$todaySalesQuery = $conn->query(
+    'SELECT
+        COUNT(*) AS sale_count,
+        COALESCE(SUM(total_amount), 0) AS sales_total
+     FROM sales
+     WHERE DATE(created_at) = CURDATE()'
+);
+
+$todaySales = $todaySalesQuery->fetch(PDO::FETCH_ASSOC);
+
+$productCountQuery = $conn->query(
+    'SELECT COUNT(*) FROM products'
+);
+
+$productCount = $productCountQuery->fetchColumn();
+
+$categoryCountQuery = $conn->query(
+    'SELECT COUNT(*) FROM categories'
+);
+
+$categoryCount = $categoryCountQuery->fetchColumn();
+
+$lowStockQuery = $conn->query(
+    'SELECT COUNT(*)
+     FROM products
+     WHERE stock_quantity <= 5'
+);
+
+$lowStockCount = $lowStockQuery->fetchColumn();
+
+$pageTitle = 'Dashboard';
+
 ?>
 
-<!DOCTYPE html>
-<html lang="en">
+<?php include 'includes/header.php'; ?>
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard</title>
-    <link rel="stylesheet" href="assets/css/style.css">
-</head>
+<main class="wrap">
 
-<body>
+    <?php include 'includes/menu.php'; ?>
 
-    <main class="container">
-        <h1>Dashboard</h1>
+    <div class="container">
+        <div class="page-header">
+            <div>
+                <h1>Dashboard</h1>
+                <p>Welcome, <?= $_SESSION['user_name'] ?>.</p>
+            </div>
 
-        <p>
-            Welcome,
-            <?= htmlspecialchars($_SESSION['user_name']) ?>.
-        </p>
+        </div>
 
-        <p>
-            Role:
-            <?= htmlspecialchars($_SESSION['user_role']) ?>
-        </p>
+        <div class="dashboard-grid">
+            <div class="dashboard-card">
+                <h2>Today's Sales</h2>
 
-        <ul>
-            <li><a href="categories.php">Category</a></li>
-            <li><a href="products.php">Product</a></li>
-            <li><a href="sales.php">Sales</a></li>
-            <li><a href="pos.php">POS</a></li>
-            <li><a href="sales-history.php">Sales History</a></li>
-        </ul>
+                <p class="dashboard-number">
+                    Rs.
+                    <?= number_format(
+                        (float) $todaySales['sales_total'],
+                        2
+                    ) ?>
+                </p>
+            </div>
 
-        <a href="logout.php">Logout</a>
-    </main>
+            <div class="dashboard-card">
+                <h2>Transactions Today</h2>
+                <p class="dashboard-number">
+                    <?= (int) $todaySales['sale_count'] ?>
+                </p>
+            </div>
 
-</body>
+            <div class="dashboard-card">
+                <h2>Total Products</h2>
+                <p class="dashboard-number">
+                    <?= $productCount ?>
+                </p>
+            </div>
 
-</html>
+            <div class="dashboard-card">
+                <h2>Total Categories</h2>
+                <p class="dashboard-number">
+                    <?= $categoryCount ?>
+                </p>
+            </div>
+
+            <div class="dashboard-card">
+                <h2>Low Stock Products</h2>
+                <p class="dashboard-number">
+                    <?= $lowStockCount ?>
+                </p>
+            </div>
+        </div>
+    </div>
+
+</main>
+
+<?php include 'includes/footer.php'; ?>
