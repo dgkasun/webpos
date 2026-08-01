@@ -15,6 +15,16 @@ if (!isset($_SESSION['cart'])) {
 
 $error = '';
 
+$productQ = $conn->query(
+    'SELECT id, name, selling_price, stock_quantity
+     FROM products
+     WHERE is_active = 1
+       AND stock_quantity > 0
+     ORDER BY name ASC'
+);
+
+$products = $productQ->fetchAll(PDO::FETCH_ASSOC);
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $action = $_POST['action'] ?? '';
 
@@ -96,14 +106,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 }
 
-$productQ = $conn->query(
+/*$productQ = $conn->query(
     'SELECT id, name, selling_price, stock_quantity
      FROM products
      WHERE stock_quantity > 0
      ORDER BY name ASC'
 );
 
-$products = $productQ->fetchAll(PDO::FETCH_ASSOC);
+$products = $productQ->fetchAll(PDO::FETCH_ASSOC);*/
 
 $cartTotal = 0;
 
@@ -130,6 +140,21 @@ $pageTitle = 'POS';
             </p>
         <?php endif; ?>
 
+        <section class="pos-search">
+            <div class="form-group product-search-wrapper">
+                <label for="product_search">Search Product</label>
+                <input type="text" id="product_search" placeholder="Type product name" autocomplete="off" autofocus>
+                <div id="product_results" class="product-results"></div>
+            </div>
+        </section>
+
+        <form method="post" id="add_product_form" style="display: none;">
+            <input type="hidden" name="action" value="add">
+            <input type="hidden" name="product_id" id="selected_product_id">
+            <input type="hidden" name="quantity" value="1">
+        </form>
+
+        <!--
         <form method="post">
             <input type="hidden" name="action" value="add">
 
@@ -156,7 +181,7 @@ $pageTitle = 'POS';
             </div>
 
             <button type="submit">Add to Cart</button>
-        </form>
+        </form> -->
 
         <hr>
 
@@ -168,7 +193,7 @@ $pageTitle = 'POS';
             <form method="post">
                 <input type="hidden" name="action" value="update">
 
-                <div class="table-wrapper">
+                <div class="table-wrapper mb20">
                     <table>
                         <thead>
                             <tr>
@@ -183,23 +208,11 @@ $pageTitle = 'POS';
                             <?php foreach ($_SESSION['cart'] as $item): ?>
                                 <?php $subtotal = $item['price'] * $item['quantity']; ?>
                                 <tr>
-                                    <td>
-                                        <?= $item['name'] ?>
-                                    </td>
-                                    <td>
-                                        Rs.
-                                        <?= number_format($item['price'], 2) ?>
-                                    </td>
-                                    <td>
-                                        <input type="number" name="quantities[<?= $item['id'] ?>]" value="<?= $item['quantity'] ?>" min="1" max="<?= $item['stock_quantity'] ?>">
-                                    </td>
-                                    <td>
-                                        Rs. <?= number_format($subtotal, 2) ?>
-                                    </td>
-                                    <td>
-                                        <button type="submit" name="remove_product" formaction="remove-cart-item.php" value="<?= $item['id'] ?>">
-                                            Remove
-                                        </button>
+                                    <td><?= $item['name'] ?></td>
+                                    <td>Rs. <?= number_format($item['price'], 2) ?></td>
+                                    <td><input type="number" name="quantities[<?= $item['id'] ?>]" value="<?= $item['quantity'] ?>" min="1" max="<?= $item['stock_quantity'] ?>"></td>
+                                    <td>Rs. <?= number_format($subtotal, 2) ?></td>
+                                    <td><button type="submit" name="remove_product" formaction="remove-cart-item.php" value="<?= $item['id'] ?>">Remove</button>
                                     </td>
                                 </tr>
                             <?php endforeach; ?>
@@ -207,9 +220,7 @@ $pageTitle = 'POS';
                         <tfoot>
                             <tr>
                                 <th colspan="3">Total</th>
-                                <th colspan="2">
-                                    Rs. <?= number_format($cartTotal, 2) ?>
-                                </th>
+                                <th colspan="2">Rs. <?= number_format($cartTotal, 2) ?></th>
                             </tr>
                         </tfoot>
                     </table>
@@ -217,16 +228,56 @@ $pageTitle = 'POS';
                 <button type="submit">Update Cart</button>
             </form>
 
-            <div class="cart-actions">
+            <div class="cart-actions alignright">
                 <form method="post">
                     <input type="hidden" name="action" value="clear">
                     <button type="submit">Clear Cart</button>
                 </form>
-
                 <a class="button-link" href="checkout.php">Payment</a>
             </div>
         <?php endif; ?>
     </div>
 </main>
+
+
+<script>
+    const products = <?= json_encode($products) ?>;
+    const searchInput = document.getElementById('product_search');
+    const productResults = document.getElementById('product_results');
+    const productIdInput = document.getElementById('selected_product_id');
+    const addProductForm = document.getElementById('add_product_form');
+
+    searchInput.addEventListener('input', function() {
+        const searchText = this.value.toLowerCase().trim();
+
+        productResults.innerHTML = '';
+
+        if (searchText === '') {
+            return;
+        }
+
+        const matches = products.filter(function(product) {
+            return product.name.toLowerCase().includes(searchText);
+        });
+
+        matches.forEach(function(product) {
+            const result = document.createElement('div');
+
+            result.classList.add('product-result');
+
+            result.innerHTML =
+                '<strong>' + product.name + '</strong>' +
+                '<span>Rs. ' + parseFloat(product.selling_price).toFixed(2) + ' | Stock: ' + product.stock_quantity + '</span>';
+
+            result.addEventListener('click', function() {
+                productIdInput.value = product.id;
+                addProductForm.submit();
+            });
+
+            productResults.appendChild(result);
+
+        });
+    });
+</script>
 
 <?php include 'includes/footer.php'; ?>

@@ -26,6 +26,14 @@ h1 {
     margin-top: 0;
 }
 
+.mb20 {
+    margin-bottom: 20px;
+}
+
+.alignright {
+    text-align: right;
+}
+
 /* login */
 .form-group {
     margin-bottom: 20px;
@@ -133,14 +141,6 @@ select {
 }
 
 /* pos */
-.cart-actions {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 15px;
-    margin-top: 25px;
-}
-
 .button-link {
     display: inline-block;
     padding: 12px 20px;
@@ -152,6 +152,14 @@ select {
 
 table input[type="number"] {
     width: 80px;
+}
+
+.cart-actions {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 15px;
+    margin-top: 25px;
 }
 
 /* receipt */
@@ -243,4 +251,38 @@ input[type=checkbox] {
     .dashboard-grid {
         grid-template-columns: 1fr;
     }
+}
+
+/* pos search */
+.product-search-wrapper {
+    position: relative;
+}
+
+.product-results {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    width: 100%;
+    background: #fff;
+    border: 1px solid #ccc;
+    max-height: 250px;
+    overflow-y: auto;
+    z-index: 1000;
+}
+
+.product-result {
+    display: flex;
+    justify-content: space-between;
+    gap: 20px;
+    padding: 12px;
+    border-bottom: 1px solid #eee;
+    cursor: pointer;
+}
+
+.product-result:hover {
+    background: #f5f5f5;
+}
+
+.product-result span {
+    font-size: 14px;
 }

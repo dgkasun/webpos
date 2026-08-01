@@ -143,7 +143,7 @@ $pageTitle = 'Checkout';
             </p>
         <?php endif; ?>
 
-        <div class="table-wrapper">
+        <div class="table-wrapper mb20">
             <table>
                 <thead>
                     <tr>
@@ -183,7 +183,9 @@ $pageTitle = 'Checkout';
                     <option value="card">Card</option>
                 </select>
             </div>
-            <button type="submit">Complete Sale</button>
+            <div class="alignright">
+                <button type="submit">Complete Sale</button>
+            </div>
         </form>
     </div>
 </main>
