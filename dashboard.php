@@ -39,6 +39,7 @@ $lowStockQuery = $conn->query(
 $lowStockCount = $lowStockQuery->fetchColumn();
 
 $pageTitle = 'Dashboard';
+$currentPage = 'Dashboard';
 
 ?>
 

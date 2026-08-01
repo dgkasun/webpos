@@ -34,21 +34,14 @@ $sale = $saleQuery->fetch(PDO::FETCH_ASSOC);
 if (!$sale) {
     exit('Sale not found.');
 }
+
+$pageTitle = 'Sale Complete';
 ?>
 
-<!DOCTYPE html>
-<html lang="en">
+<?php include 'includes/header.php'; ?>
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sale Complete</title>
-    <link rel="stylesheet" href="assets/css/style.css">
-</head>
-
-<body>
-
-    <main class="container">
+<main class="wrap">
+    <div class="container">
 
         <h1>Sale Completed</h1>
         <table>
@@ -75,8 +68,6 @@ if (!$sale) {
         <a class="button" href="pos.php">New Sale</a>
         <button onclick="window.print();">Print Receipt</button>
 
-    </main>
+</main>
 
-</body>
-
-</html>
+<?php include 'includes/footer.php'; ?>

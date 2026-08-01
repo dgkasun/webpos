@@ -122,21 +122,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
     }
 }
+
+$pageTitle = 'Checkout';
 ?>
 
-<!DOCTYPE html>
-<html lang="en">
+<?php include 'includes/header.php'; ?>
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Checkout</title>
-    <link rel="stylesheet" href="assets/css/style.css">
-</head>
-
-<body>
-
-    <main class="container">
+<main class="wrap">
+    <div class="container">
         <div class="page-header">
             <div>
                 <h1>Checkout</h1>
@@ -192,7 +185,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             </div>
             <button type="submit">Complete Sale</button>
         </form>
-    </main>
-</body>
+    </div>
+</main>
 
-</html>
+<?php include 'includes/footer.php'; ?>

@@ -37,22 +37,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         $error = 'Invalid username or password.';
     }
-} ?>
+}
 
-<!DOCTYPE html>
-<html lang="en">
+$pageTitle = 'Login';
+?>
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login</title>
-    <link rel="stylesheet" href="assets/css/style.css">
-</head>
+<?php include 'includes/header.php'; ?>
 
-<body>
-
-    <main class="container">
-        <h1>WebPOS Login</h1>
+<main class="wrap">
+    <div class="container">
+        <h1>Login</h1>
 
         <?php if ($error !== ''): ?>
             <p class="error">
@@ -71,8 +65,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             </div>
             <button type="submit">Login</button>
         </form>
-    </main>
+    </div>
+</main>
 
-</body>
-
-</html>
+<?php include 'includes/footer.php'; ?>

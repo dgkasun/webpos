@@ -48,25 +48,21 @@ $catQuery = $conn->query(
 );
 
 $categories = $catQuery->fetchAll(PDO::FETCH_ASSOC);
+
+$pageTitle = 'Categories';
+$currentPage = 'Categories';
 ?>
 
-<!DOCTYPE html>
-<html lang="en">
+<?php include 'includes/header.php'; ?>
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Categories</title>
-    <link rel="stylesheet" href="assets/css/style.css">
-</head>
+<main class="wrap">
 
-<body>
-    <main class="container">
+    <?php include 'includes/menu.php'; ?>
+    <div class="container">
         <div class="page-header">
             <div>
-                <h1>Product Categories</h1>
+                <h1>Categories</h1>
             </div>
-            <p><a href="dashboard.php">Back to Dashboard</a></p>
         </div>
 
         <?php if ($message !== ''): ?>
@@ -125,7 +121,7 @@ $categories = $catQuery->fetchAll(PDO::FETCH_ASSOC);
                 </table>
             </div>
         <?php endif; ?>
-    </main>
-</body>
+    </div>
+</main>
 
-</html>
+<?php include 'includes/footer.php'; ?>

@@ -84,27 +84,21 @@ $productStmt = $conn->query(
 );
 
 $products = $productStmt->fetchAll(PDO::FETCH_ASSOC);
+
+$pageTitle = 'Products';
+$currentPage = 'Products';
 ?>
 
-<!DOCTYPE html>
-<html lang="en">
+<?php include 'includes/header.php'; ?>
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Products</title>
-    <link rel="stylesheet" href="assets/css/style.css">
-</head>
+<main class="wrap">
 
-<body>
-
-    <main class="container">
+    <?php include 'includes/menu.php'; ?>
+    <div class="container">
         <div class="page-header">
             <div>
                 <h1>Products</h1>
-                <p>Add and manage shop products.</p>
             </div>
-            <a href="dashboard.php">Back to Dashboard</a>
         </div>
 
         <?php if ($message !== ''): ?>
@@ -201,7 +195,6 @@ $products = $productStmt->fetchAll(PDO::FETCH_ASSOC);
                 </table>
             </div>
         <?php endif; ?>
-    </main>
-</body>
-
-</html>
+    </div>
+</main>
+<?php include 'includes/footer.php'; ?>

@@ -104,22 +104,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $product = $productQuery->fetch(PDO::FETCH_ASSOC);
     }
 }
+
+$pageTitle = 'Edit Product';
+$currentPage = 'Products';
 ?>
 
+<?php include 'includes/header.php'; ?>
 
-<!DOCTYPE html>
-<html lang="en">
+<main class="wrap">
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Edit Product</title>
-    <link rel="stylesheet" href="assets/css/style.css">
-</head>
-
-<body>
-
-    <main class="container">
+    <?php include 'includes/menu.php'; ?>
+    <div class="container">
         <div class="page-header">
             <div>
                 <h1>Edit Product</h1>
@@ -180,7 +175,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
             <button type="submit">Update Product</button>
         </form>
-    </main>
-</body>
+    </div>
+</main>
 
-</html>
+<?php include 'includes/footer.php'; ?>

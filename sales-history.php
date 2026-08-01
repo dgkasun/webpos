@@ -23,27 +23,21 @@ $salesQuery = $conn->query(
 );
 
 $sales = $salesQuery->fetchAll(PDO::FETCH_ASSOC);
+
+$pageTitle = 'Sales History';
+$currentPage = 'Sales History';
 ?>
 
-<!DOCTYPE html>
-<html lang="en">
+<?php include 'includes/header.php'; ?>
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sales History</title>
-    <link rel="stylesheet" href="assets/css/style.css">
-</head>
+<main class="wrap">
 
-<body>
-
-    <main class="container">
+    <?php include 'includes/menu.php'; ?>
+    <div class="container">
         <div class="page-header">
             <div>
                 <h1>Sales History</h1>
             </div>
-
-            <a href="dashboard.php">Back to Dashboard</a>
         </div>
 
         <?php if (empty($sales)): ?>
@@ -77,7 +71,7 @@ $sales = $salesQuery->fetchAll(PDO::FETCH_ASSOC);
                 </table>
             </div>
         <?php endif; ?>
-    </main>
-</body>
+    </div>
+</main>
 
-</html>
+<?php include 'includes/footer.php'; ?>

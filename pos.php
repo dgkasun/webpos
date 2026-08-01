@@ -110,27 +110,18 @@ $cartTotal = 0;
 foreach ($_SESSION['cart'] as $item) {
     $cartTotal += $item['price'] * $item['quantity'];
 }
+
+$pageTitle = 'POS';
 ?>
 
-<!DOCTYPE html>
-<html lang="en">
+<?php include 'includes/header.php'; ?>
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>POS</title>
-    <link rel="stylesheet" href="assets/css/style.css?v=1">
-</head>
-
-<body>
-
-    <main class="container">
+<main class="wrap">
+    <div class="container">
         <div class="page-header">
             <div>
                 <h1>POS</h1>
             </div>
-
-            <a href="dashboard.php">Back to Dashboard</a>
         </div>
 
         <?php if ($error !== ''): ?>
@@ -235,7 +226,7 @@ foreach ($_SESSION['cart'] as $item) {
                 <a class="button-link" href="checkout.php">Payment</a>
             </div>
         <?php endif; ?>
-    </main>
-</body>
+    </div>
+</main>
 
-</html>
+<?php include 'includes/footer.php'; ?>

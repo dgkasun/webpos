@@ -76,21 +76,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
     }
 }
+
+$pageTitle = 'Edit Category';
+$currentPage = 'Categories';
 ?>
 
-<!DOCTYPE html>
-<html lang="en">
+<?php include 'includes/header.php'; ?>
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Edit Category</title>
-    <link rel="stylesheet" href="assets/css/style.css">
-</head>
+<main class="wrap">
 
-<body>
-
-    <main class="container">
+    <?php include 'includes/menu.php'; ?>
+    <div class="container">
         <div class="page-header">
             <div>
                 <h1>Edit Category</h1>
@@ -129,7 +125,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
             <button type="submit">Update Category</button>
         </form>
-    </main>
-</body>
+    </div>
+</main>
 
-</html>
+
+<?php include 'includes/footer.php'; ?>

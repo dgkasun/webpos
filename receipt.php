@@ -57,21 +57,18 @@ $saleItemsQuery->execute([
 ]);
 
 $saleItems = $saleItemsQuery->fetchAll(PDO::FETCH_ASSOC);
+
+$pageTitle = 'Receipt';
+$currentPage = 'Sales History';
 ?>
 
-<!DOCTYPE html>
-<html lang="en">
+<?php include 'includes/header.php'; ?>
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Receipt</title>
-    <link rel="stylesheet" href="assets/css/style.css?v=w">
-</head>
+<main class="wrap">
 
-<body>
+    <?php include 'includes/menu.php'; ?>
+    <div class="container">
 
-    <main class="container receipt">
         <div class="receipt-actions">
             <a href="sales-history.php">Back to Sales History</a>
 
@@ -138,7 +135,7 @@ $saleItems = $saleItemsQuery->fetchAll(PDO::FETCH_ASSOC);
                 </tfoot>
             </table>
         </div>
-    </main>
-</body>
+    </div>
+</main>
 
-</html>
+<?php include 'includes/footer.php'; ?>
