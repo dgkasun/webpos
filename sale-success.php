@@ -17,10 +17,7 @@ if ($saleId <= 0) {
 }
 
 $saleQuery = $conn->prepare(
-    'SELECT
-        total_amount,
-        payment_method,
-        created_at
+    'SELECT total_amount, payment_method, created_at, cash_received, change_amount
      FROM sales
      WHERE id = :id'
 );
@@ -62,6 +59,20 @@ $pageTitle = 'Sale Complete';
                 <td><?= $sale['created_at'] ?></td>
             </tr>
         </table>
+
+        <?php if ($sale['payment_method'] === 'cash'): ?>
+
+            <p>
+                <strong>Cash Received:</strong>
+                Rs. <?= number_format($sale['cash_received'], 2) ?>
+            </p>
+
+            <p>
+                <strong>Change:</strong>
+                Rs. <?= number_format($sale['change_amount'], 2) ?>
+            </p>
+
+        <?php endif; ?>
 
         <br>
 

@@ -23,23 +23,45 @@ foreach ($_SESSION['cart'] as $item) {
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $paymentMethod = $_POST['payment_method'] ?? 'cash';
+    $cashReceived = $_POST['cash_received'] ?? '';
 
     if (!in_array($paymentMethod, ['cash', 'card'], true)) {
         $error = 'Please select a valid payment method.';
+    } elseif (
+        $paymentMethod === 'cash' &&
+        (
+            $cashReceived === '' ||
+            !is_numeric($cashReceived) ||
+            (float) $cashReceived < $cartTotal
+        )
+    ) {
+        $error = 'Cash received must be equal to or greater than the total.';
     } else {
         try {
             $conn->beginTransaction();
+
+            $cashReceivedAmount = null;
+            $changeAmount = null;
+
+            if ($paymentMethod === 'cash') {
+                $cashReceivedAmount = $cashReceived;
+                $changeAmount = $cashReceivedAmount - $cartTotal;
+            }
 
             // Create sale record.
             $saleQuery = $conn->prepare(
                 'INSERT INTO sales (
                     user_id,
                     total_amount,
-                    payment_method
+                    payment_method,
+                    cash_received,
+                    change_amount
                 ) VALUES (
                     :user_id,
                     :total_amount,
-                    :payment_method
+                    :payment_method,
+                    :cash_received,
+                    :change_amount
                 )'
             );
 
@@ -47,6 +69,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 'user_id' => $_SESSION['user_id'],
                 'total_amount' => $cartTotal,
                 'payment_method' => $paymentMethod,
+                'cash_received' => $cashReceivedAmount,
+                'change_amount' => $changeAmount,
             ]);
 
             $saleId = $conn->lastInsertId();
@@ -183,11 +207,38 @@ $pageTitle = 'Checkout';
                     <option value="card">Card</option>
                 </select>
             </div>
+
+            <div class="form-group" id="cash_received_group">
+                <label for="cash_received">Cash Received</label>
+                <input type="number" id="cash_received" name="cash_received" min="<?= $cartTotal ?>" step="0.01" placeholder="Amount customer gives">
+            </div>
+
             <div class="alignright">
                 <button type="submit">Complete Sale</button>
             </div>
         </form>
     </div>
 </main>
+
+<script>
+    const paymentMethod = document.getElementById('payment_method');
+    const cashReceivedGroup = document.getElementById('cash_received_group');
+    const cashReceived = document.getElementById('cash_received');
+
+    function updatePaymentFields() {
+        if (paymentMethod.value === 'cash') {
+            cashReceivedGroup.style.display = 'block';
+            cashReceived.required = true;
+        } else {
+            cashReceivedGroup.style.display = 'none';
+            cashReceived.required = false;
+            cashReceived.value = '';
+        }
+    }
+
+    paymentMethod.addEventListener('change', updatePaymentFields);
+
+    updatePaymentFields();
+</script>
 
 <?php include 'includes/footer.php'; ?>

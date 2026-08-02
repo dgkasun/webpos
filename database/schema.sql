@@ -39,6 +39,8 @@ CREATE TABLE sales (
     total_amount DECIMAL(10,2) NOT NULL,
     payment_method VARCHAR(30) NOT NULL DEFAULT 'cash',
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    cash_received DECIMAL(10,2) NULL,
+    change_amount DECIMAL(10,2) NULL,
 
     CONSTRAINT fk_sales_user
         FOREIGN KEY (user_id)
