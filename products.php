@@ -48,7 +48,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $error = 'Prices and stock values cannot be negative.';
     } else {
         try {
-            $stmt = $conn->prepare(
+            $productQuery = $conn->prepare(
                 'INSERT INTO products (
                     category_id, name, cost_price, selling_price, stock_quantity
                 ) VALUES (
@@ -56,12 +56,25 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 )'
             );
 
-            $stmt->execute([
+            $productQuery->execute([
                 'category_id' => $categoryId,
                 'name' => $name,
                 'cost_price' => $costPrice,
                 'selling_price' => $sellingPrice,
                 'stock_quantity' => $stockQuantity
+            ]);
+
+            /* barcode added */
+            $productId = $conn->lastInsertId();
+            $barcode = 'WEB' . str_pad($productId, 8, '0', STR_PAD_LEFT);
+            $barcodeQuery = $conn->prepare(
+                'UPDATE products
+                SET barcode = :barcode
+                WHERE id = :id'
+            );
+            $barcodeQuery->execute([
+                'barcode' => $barcode,
+                'id' => $productId,
             ]);
 
             $message = 'Product added successfully.';

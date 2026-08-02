@@ -16,7 +16,7 @@ if (!isset($_SESSION['cart'])) {
 $error = '';
 
 $productQ = $conn->query(
-    'SELECT id, name, selling_price, stock_quantity
+    'SELECT id, name, selling_price, stock_quantity, barcode
      FROM products
      WHERE is_active = 1
        AND stock_quantity > 0
@@ -270,14 +270,36 @@ $pageTitle = 'POS';
                 '<span>Rs. ' + parseFloat(product.selling_price).toFixed(2) + ' | Stock: ' + product.stock_quantity + '</span>';
 
             result.addEventListener('click', function() {
-                productIdInput.value = product.id;
-                addProductForm.submit();
+                addProduct(product.id);
             });
 
             productResults.appendChild(result);
 
         });
     });
+
+    searchInput.addEventListener('keydown', function(event) {
+        if (event.key !== 'Enter') {
+            return;
+        }
+
+        event.preventDefault();
+
+        const scannedBarcode = this.value.trim();
+
+        const product = products.find(function(product) {
+            return product.barcode === scannedBarcode;
+        });
+
+        if (product) {
+            addProduct(product.id);
+        }
+    });
+
+    function addProduct(productId) {
+        productIdInput.value = productId;
+        addProductForm.submit();
+    }
 </script>
 
 <?php include 'includes/footer.php'; ?>
