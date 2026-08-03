@@ -8,6 +8,9 @@ if (!isset($_SESSION['user_id'])) {
 }
 
 require_once __DIR__ . '/config/database.php';
+require_once __DIR__ . '/classes/category.php';
+
+$categoryManager = new Category($conn);
 
 $categoryId = $_GET['id'] ?? 0;
 
@@ -19,7 +22,9 @@ if ($categoryId <= 0) {
 $message = '';
 $error = '';
 
-$categoryQuery = $conn->prepare(
+$category = $categoryManager->find($categoryId);
+
+/*$categoryQuery = $conn->prepare(
     'SELECT id, name, description, is_active
      FROM categories
      WHERE id = :id'
@@ -29,7 +34,7 @@ $categoryQuery->execute([
     'id' => $categoryId,
 ]);
 
-$category = $categoryQuery->fetch(PDO::FETCH_ASSOC);
+$category = $categoryQuery->fetch(PDO::FETCH_ASSOC);*/
 
 if (!$category) {
     exit('Category not found.');
@@ -44,7 +49,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $error = 'Category name is required.';
     } else {
         try {
-            $updateCategoryQuery = $conn->prepare(
+            /*$updateCategoryQuery = $conn->prepare(
                 'UPDATE categories
                  SET
                     name = :name,
@@ -58,15 +63,23 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 'description' => $description !== '' ? $description : null,
                 'is_active' => $isActive,
                 'id' => $categoryId,
-            ]);
+            ]);*/
+
+            $categoryManager->update(
+                $categoryId,
+                $name,
+                $description,
+                $isActive
+            );
 
             $message = 'Category updated successfully.';
 
-            $categoryQuery->execute([
+            /*$categoryQuery->execute([
                 'id' => $categoryId,
             ]);
 
-            $category = $categoryQuery->fetch(PDO::FETCH_ASSOC);
+            $category = $categoryQuery->fetch(PDO::FETCH_ASSOC);*/
+            $category = $categoryManager->find($categoryId);
         } catch (PDOException $e) {
             if ($e->getCode() === '23000') {
                 $error = 'This category already exists.';

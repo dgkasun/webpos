@@ -8,6 +8,9 @@ if (!isset($_SESSION['user_id'])) {
 }
 
 require_once __DIR__ . '/config/database.php';
+require_once __DIR__ . '/classes/category.php';
+
+$categoryManager = new Category($conn);
 
 $message = '';
 $error = '';
@@ -20,7 +23,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $error = 'Category name is required.';
     } else {
         try {
-            $catQuery = $conn->prepare(
+            /*$catQuery = $conn->prepare(
                 'INSERT INTO categories (name, description)
                  VALUES (:name, :description)'
             );
@@ -28,7 +31,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $catQuery->execute([
                 'name' => $name,
                 'description' => $description !== '' ? $description : null,
-            ]);
+            ]);*/
+
+            $categoryManager->create($name, $description);
 
             $message = 'Category added successfully.';
         } catch (PDOException $e) {
@@ -41,13 +46,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 }
 
-$catQuery = $conn->query(
+/*$catQuery = $conn->query(
     'SELECT id, name, description, is_active
      FROM categories
      ORDER BY name ASC'
 );
 
-$categories = $catQuery->fetchAll(PDO::FETCH_ASSOC);
+$categories = $catQuery->fetchAll(PDO::FETCH_ASSOC);*/
+
+$categories = $categoryManager->getAll();
 
 $pageTitle = 'Categories';
 $currentPage = 'Categories';
