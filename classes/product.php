@@ -18,7 +18,7 @@ class Product
     public function getAll(): array
     {
         $productQuery = $this->conn->query(
-            'SELECT id, products.name, products.barcode, products.cost_price, products.selling_price, products.stock_quantity, products.is_active, categories.name AS category_name
+            'SELECT products.id, products.name, products.barcode, products.cost_price, products.selling_price, products.stock_quantity, products.is_active, categories.name AS category_name
              FROM products
              INNER JOIN categories
                 ON categories.id = products.category_id
