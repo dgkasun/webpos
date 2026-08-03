@@ -8,10 +8,16 @@ if (!isset($_SESSION['user_id'])) {
 }
 
 require_once __DIR__ . '/config/database.php';
+require_once __DIR__ . '/classes/product.php';
+
+$productManager = new Product($conn);
 
 $message = '';
 $error = '';
 
+$categories = $productManager->getActiveCategories();
+
+/*
 $categoryStmt = $conn->query(
     'SELECT id, name
      FROM categories
@@ -19,7 +25,7 @@ $categoryStmt = $conn->query(
      ORDER BY name ASC'
 );
 
-$categories = $categoryStmt->fetchAll(PDO::FETCH_ASSOC);
+$categories = $categoryStmt->fetchAll(PDO::FETCH_ASSOC);*/
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $name = trim($_POST['name'] ?? '');
@@ -31,7 +37,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (
         $name === '' ||
         $categoryId <= 0 ||
-        $sellingPrice === ''
+        $sellingPrice === '' ||
+        $costPrice === '' ||
+        $stockQuantity === ''
     ) {
         $error = 'Please complete all required fields.';
     } elseif (
@@ -48,7 +56,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $error = 'Prices and stock values cannot be negative.';
     } else {
         try {
-            $productQuery = $conn->prepare(
+            $productManager->create($categoryId, $name, $costPrice, $sellingPrice, $stockQuantity);
+
+            /*$productQuery = $conn->prepare(
                 'INSERT INTO products (
                     category_id, name, cost_price, selling_price, stock_quantity
                 ) VALUES (
@@ -62,10 +72,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 'cost_price' => $costPrice,
                 'selling_price' => $sellingPrice,
                 'stock_quantity' => $stockQuantity
-            ]);
+            ]);*/
 
             /* barcode added */
-            $productId = $conn->lastInsertId();
+            /*$productId = $conn->lastInsertId();
             $barcode = 'WEB' . str_pad($productId, 8, '0', STR_PAD_LEFT);
             $barcodeQuery = $conn->prepare(
                 'UPDATE products
@@ -75,7 +85,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $barcodeQuery->execute([
                 'barcode' => $barcode,
                 'id' => $productId,
-            ]);
+            ]);*/
 
             $message = 'Product added successfully.';
         } catch (PDOException $e) {
@@ -88,7 +98,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 }
 
-$productStmt = $conn->query(
+$products = $productManager->getAll();
+
+/*$productStmt = $conn->query(
     'SELECT products.id, products.name, products.cost_price, products.selling_price, products.stock_quantity, products.is_active, categories.name AS category_name
      FROM products
      INNER JOIN categories
@@ -96,7 +108,7 @@ $productStmt = $conn->query(
      ORDER BY products.name ASC'
 );
 
-$products = $productStmt->fetchAll(PDO::FETCH_ASSOC);
+$products = $productStmt->fetchAll(PDO::FETCH_ASSOC);*/
 
 $pageTitle = 'Products';
 $currentPage = 'Products';

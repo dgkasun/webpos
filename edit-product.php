@@ -8,6 +8,9 @@ if (!isset($_SESSION['user_id'])) {
 }
 
 require_once __DIR__ . '/config/database.php';
+require_once __DIR__ . '/classes/product.php';
+
+$productManager = new Product($conn);
 
 $productId = $_GET['id'] ?? 0;
 
@@ -19,16 +22,20 @@ if ($productId <= 0) {
 $message = '';
 $error = '';
 
-$categoriesQuery = $conn->query(
+$categories = $productManager->getActiveCategories();
+
+/*$categoriesQuery = $conn->query(
     'SELECT id, name
      FROM categories
      WHERE is_active = 1
      ORDER BY name ASC'
 );
 
-$categories = $categoriesQuery->fetchAll(PDO::FETCH_ASSOC);
+$categories = $categoriesQuery->fetchAll(PDO::FETCH_ASSOC);*/
 
-$productQuery = $conn->prepare(
+$product = $productManager->find($productId);
+
+/*$productQuery = $conn->prepare(
     'SELECT id, category_id, name, cost_price, selling_price, stock_quantity, is_active
      FROM products
      WHERE id = :id'
@@ -38,7 +45,7 @@ $productQuery->execute([
     'id' => $productId,
 ]);
 
-$product = $productQuery->fetch(PDO::FETCH_ASSOC);
+$product = $productQuery->fetch(PDO::FETCH_ASSOC);*/
 
 if (!$product) {
     exit('Product not found.');
@@ -73,7 +80,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     ) {
         $error = 'Prices and stock cannot be negative.';
     } else {
-        $updateProductQuery = $conn->prepare(
+
+        $productManager->update($productId, $categoryId, $name, $costPrice, $sellingPrice, $stockQuantity, $isActive);
+
+        /*$updateProductQuery = $conn->prepare(
             'UPDATE products
              SET
                 category_id = :category_id,
@@ -93,15 +103,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             'stock_quantity' => $stockQuantity,
             'is_active' => $isActive,
             'id' => $productId,
-        ]);
+        ]);*/
 
         $message = 'Product updated successfully.';
 
-        $productQuery->execute([
+        $product = $productManager->find($productId);
+
+        /*$productQuery->execute([
             'id' => $productId,
         ]);
 
-        $product = $productQuery->fetch(PDO::FETCH_ASSOC);
+        $product = $productQuery->fetch(PDO::FETCH_ASSOC);*/
     }
 }
 
