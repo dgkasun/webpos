@@ -42,7 +42,7 @@ class Sale
         return $saleQuery->fetch(PDO::FETCH_ASSOC);
     }
 
-    public function getItems(int $saleId): array
+    public function getItems(int $saleId)
     {
         $saleItemsQuery = $this->conn->prepare(
             'SELECT products.name AS product_name, sale_items.quantity, sale_items.unit_price, sale_items.subtotal
@@ -56,5 +56,15 @@ class Sale
             'sale_id' => $saleId,
         ]);
         return $saleItemsQuery->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    public function getTodaySummary()
+    {
+        $saleQuery = $this->conn->query(
+            'SELECT COUNT(*) AS sale_count,     COALESCE(SUM(total_amount), 0) AS sales_total
+            FROM sales
+            WHERE DATE(created_at) = CURDATE()'
+        );
+        return $saleQuery->fetch(PDO::FETCH_ASSOC);
     }
 }

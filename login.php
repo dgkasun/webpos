@@ -2,6 +2,9 @@
 session_start();
 
 require_once __DIR__ . '/config/database.php';
+require_once __DIR__ . '/classes/user.php';
+
+$userManager = new User($conn);
 
 $error = '';
 
@@ -12,7 +15,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if ($username === '' || $password === '') {
         $error = 'Please enter your username and password.';
     } else {
-        $userQuery = $conn->prepare(
+        $user = $userManager->findActiveByUsername($username);
+        /*$userQuery = $conn->prepare(
             'SELECT id, name, username, password, role
             FROM users
             WHERE username = :username
@@ -24,7 +28,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             'username' => $username,
         ]);
 
-        $user = $userQuery->fetch(PDO::FETCH_ASSOC);
+        $user = $userQuery->fetch(PDO::FETCH_ASSOC);*/
 
         if ($user && password_verify($password, $user['password'])) {
             $_SESSION['user_id'] = $user['id'];

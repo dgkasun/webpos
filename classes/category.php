@@ -69,4 +69,12 @@ class Category
             'id' => $id,
         ]);
     }
+
+    public function getCount()
+    {
+        $categoryQuery = $this->conn->query(
+            'SELECT COUNT(*) FROM categories'
+        );
+        return $categoryQuery->fetchColumn();
+    }
 }

@@ -101,4 +101,25 @@ class Product
             'id' => $id,
         ]);
     }
+
+    public function getCount()
+    {
+        $productQuery = $this->conn->query(
+            'SELECT COUNT(*) FROM products'
+        );
+        return $productQuery->fetchColumn();
+    }
+
+    public function getLowStockCount($level = 5)
+    {
+        $productQuery = $this->conn->prepare(
+            'SELECT COUNT(*) 
+            FROM products 
+            WHERE stock_quantity <= :level AND is_active = 1'
+        );
+        $productQuery->execute([
+            'level' => $level,
+        ]);
+        return $productQuery->fetchColumn();
+    }
 }

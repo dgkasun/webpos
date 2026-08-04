@@ -7,8 +7,17 @@ if (!isset($_SESSION['user_id'])) {
 }
 
 require_once __DIR__ . '/config/database.php';
+require_once __DIR__ . '/classes/sale.php';
+require_once __DIR__ . '/classes/product.php';
+require_once __DIR__ . '/classes/category.php';
 
-$todaySalesQuery = $conn->query(
+$saleManager = new Sale($conn);
+$productManager = new Product($conn);
+$categoryManager = new Category($conn);
+
+$todaySales = $saleManager->getTodaySummary();
+
+/*$todaySalesQuery = $conn->query(
     'SELECT
         COUNT(*) AS sale_count,
         COALESCE(SUM(total_amount), 0) AS sales_total
@@ -16,27 +25,32 @@ $todaySalesQuery = $conn->query(
      WHERE DATE(created_at) = CURDATE()'
 );
 
-$todaySales = $todaySalesQuery->fetch(PDO::FETCH_ASSOC);
+$todaySales = $todaySalesQuery->fetch(PDO::FETCH_ASSOC);*/
 
-$productCountQuery = $conn->query(
+$productCount = $productManager->getCount();
+/*$productCountQuery = $conn->query(
     'SELECT COUNT(*) FROM products'
 );
 
-$productCount = $productCountQuery->fetchColumn();
+$productCount = $productCountQuery->fetchColumn();*/
 
-$categoryCountQuery = $conn->query(
+$categoryCount = $categoryManager->getCount();
+
+/*$categoryCountQuery = $conn->query(
     'SELECT COUNT(*) FROM categories'
 );
 
-$categoryCount = $categoryCountQuery->fetchColumn();
+$categoryCount = $categoryCountQuery->fetchColumn();*/
 
-$lowStockQuery = $conn->query(
+$lowStockCount = $productManager->getLowStockCount();
+
+/*$lowStockQuery = $conn->query(
     'SELECT COUNT(*)
      FROM products
      WHERE stock_quantity <= 5'
 );
 
-$lowStockCount = $lowStockQuery->fetchColumn();
+$lowStockCount = $lowStockQuery->fetchColumn();*/
 
 $pageTitle = 'Dashboard';
 $currentPage = 'Dashboard';
