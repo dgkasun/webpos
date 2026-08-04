@@ -8,8 +8,13 @@ if (!isset($_SESSION['user_id'])) {
 }
 
 require_once __DIR__ . '/config/database.php';
+require_once __DIR__ . '/classes/Sale.php';
 
-$salesQuery = $conn->query(
+$saleManager = new Sale($conn);
+
+$sales = $saleManager->getAll();
+
+/*$salesQuery = $conn->query(
     'SELECT
         sales.id,
         sales.total_amount,
@@ -22,7 +27,7 @@ $salesQuery = $conn->query(
      ORDER BY sales.created_at DESC'
 );
 
-$sales = $salesQuery->fetchAll(PDO::FETCH_ASSOC);
+$sales = $salesQuery->fetchAll(PDO::FETCH_ASSOC);*/
 
 $pageTitle = 'Sales History';
 $currentPage = 'Sales History';

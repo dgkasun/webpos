@@ -8,6 +8,9 @@ if (!isset($_SESSION['user_id'])) {
 }
 
 require_once __DIR__ . '/config/database.php';
+require_once __DIR__ . '/classes/Sale.php';
+
+$saleManager = new Sale($conn);
 
 $saleId = $_GET['id'] ?? 0;
 
@@ -16,7 +19,9 @@ if ($saleId <= 0) {
     exit;
 }
 
-$saleQuery = $conn->prepare(
+$sale = $saleManager->find($saleId);
+
+/*$saleQuery = $conn->prepare(
     'SELECT
         sales.id,
         sales.total_amount,
@@ -33,13 +38,15 @@ $saleQuery->execute([
     'sale_id' => $saleId,
 ]);
 
-$sale = $saleQuery->fetch(PDO::FETCH_ASSOC);
+$sale = $saleQuery->fetch(PDO::FETCH_ASSOC);*/
 
 if (!$sale) {
     exit('Sale not found.');
 }
 
-$saleItemsQuery = $conn->prepare(
+$saleItems = $saleManager->getItems($saleId);
+
+/*$saleItemsQuery = $conn->prepare(
     'SELECT
         products.name AS product_name,
         sale_items.quantity,
@@ -56,7 +63,7 @@ $saleItemsQuery->execute([
     'sale_id' => $saleId,
 ]);
 
-$saleItems = $saleItemsQuery->fetchAll(PDO::FETCH_ASSOC);
+$saleItems = $saleItemsQuery->fetchAll(PDO::FETCH_ASSOC);*/
 
 $pageTitle = 'Receipt';
 $currentPage = 'Sales History';
