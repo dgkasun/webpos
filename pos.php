@@ -8,14 +8,21 @@ if (!isset($_SESSION['user_id'])) {
 }
 
 require_once __DIR__ . '/config/database.php';
+require_once __DIR__ . '/classes/product.php';
+require_once __DIR__ . '/classes/cart.php';
 
-if (!isset($_SESSION['cart'])) {
+$productManager = new Product($conn);
+$cart = new Cart();
+
+/*if (!isset($_SESSION['cart'])) {
     $_SESSION['cart'] = [];
-}
+}*/
 
 $error = '';
 
-$productQ = $conn->query(
+$products = $productManager->getAvailableForSale();
+
+/*$productQ = $conn->query(
     'SELECT id, name, selling_price, stock_quantity, barcode
      FROM products
      WHERE is_active = 1
@@ -23,7 +30,7 @@ $productQ = $conn->query(
      ORDER BY name ASC'
 );
 
-$products = $productQ->fetchAll(PDO::FETCH_ASSOC);
+$products = $productQ->fetchAll(PDO::FETCH_ASSOC);*/
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $action = $_POST['action'] ?? '';
@@ -35,7 +42,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if ($productId <= 0 || $quantity <= 0) {
             $error = 'Please select a product and valid quantity.';
         } else {
-            $productQuery = $conn->prepare(
+            $product = $productManager->findAvailable($productId);
+            /*$productQuery = $conn->prepare(
                 'SELECT id, name, selling_price, stock_quantity
                  FROM products
                  WHERE id = :id'
@@ -45,12 +53,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 'id' => $productId,
             ]);
 
-            $product = $productQuery->fetch(PDO::FETCH_ASSOC);
+            $product = $productQuery->fetch(PDO::FETCH_ASSOC);*/
 
             if (!$product) {
                 $error = 'Product not found.';
             } else {
-                $existingQuantity =
+                $error = $cart->add($product, $quantity);
+
+                /*$existingQuantity =
                     $_SESSION['cart'][$productId]['quantity'] ?? 0;
 
                 $newQuantity = $existingQuantity + $quantity;
@@ -66,15 +76,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         'stock_quantity' =>
                         $product['stock_quantity'],
                     ];
-                }
+                }*/
             }
         }
     }
 
     if ($action === 'update') {
         $quantities = $_POST['quantities'] ?? [];
+        $error = $cart->update($quantities);
 
-        foreach ($quantities as $productId => $quantity) {
+        /*foreach ($quantities as $productId => $quantity) {
             $productId = $productId;
             $quantity = $quantity;
 
@@ -92,17 +103,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             } else {
                 $error = 'One or more quantities exceed available stock.';
             }
-        }
+        }*/
     }
 
     if ($action === 'remove') {
         $productId = ($_POST['product_id'] ?? 0);
-
-        unset($_SESSION['cart'][$productId]);
+        $cart->remove($productId);
+        //unset($_SESSION['cart'][$productId]);
     }
 
     if ($action === 'clear') {
-        $_SESSION['cart'] = [];
+        $cart->clear();
+        //$_SESSION['cart'] = [];
     }
 }
 
@@ -115,11 +127,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 $products = $productQ->fetchAll(PDO::FETCH_ASSOC);*/
 
-$cartTotal = 0;
+/*$cartTotal = 0;
 
 foreach ($_SESSION['cart'] as $item) {
     $cartTotal += $item['price'] * $item['quantity'];
-}
+}*/
+
+$cartItems = $cart->getItems();
+$cartTotal = $cart->getTotal();
 
 $pageTitle = 'POS';
 ?>
@@ -187,7 +202,7 @@ $pageTitle = 'POS';
 
         <h2>Current Sale</h2>
 
-        <?php if (empty($_SESSION['cart'])): ?>
+        <?php if (empty($cartItems)): ?>
             <p>No products have been added.</p>
         <?php else: ?>
             <form method="post">
@@ -205,7 +220,7 @@ $pageTitle = 'POS';
                             </tr>
                         </thead>
                         <tbody>
-                            <?php foreach ($_SESSION['cart'] as $item): ?>
+                            <?php foreach ($cartItems as $item): ?>
                                 <?php $subtotal = $item['price'] * $item['quantity']; ?>
                                 <tr>
                                     <td><?= $item['name'] ?></td>

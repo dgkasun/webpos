@@ -8,6 +8,9 @@ if (!isset($_SESSION['user_id'])) {
 }
 
 require_once __DIR__ . '/config/database.php';
+require_once __DIR__ . '/classes/sale.php';
+
+$saleManager = new Sale($conn);
 
 $saleId = $_GET['id'] ?? 0;
 
@@ -16,7 +19,9 @@ if ($saleId <= 0) {
     exit;
 }
 
-$saleQuery = $conn->prepare(
+$sale = $saleManager->find($saleId);
+
+/*$saleQuery = $conn->prepare(
     'SELECT total_amount, payment_method, created_at, cash_received, change_amount
      FROM sales
      WHERE id = :id'
@@ -26,7 +31,7 @@ $saleQuery->execute([
     'id' => $saleId,
 ]);
 
-$sale = $saleQuery->fetch(PDO::FETCH_ASSOC);
+$sale = $saleQuery->fetch(PDO::FETCH_ASSOC);*/
 
 if (!$sale) {
     exit('Sale not found.');

@@ -67,4 +67,82 @@ class Sale
         );
         return $saleQuery->fetch(PDO::FETCH_ASSOC);
     }
+
+    /* checkout */
+    public function create(int $userId, array $items, float $totalAmount, string $paymentMethod, ?float $cashReceived, ?float $changeAmount)
+    {
+        try {
+            $this->conn->beginTransaction();
+
+            // Create sale record.
+            $saleQuery = $this->conn->prepare(
+                'INSERT INTO sales (user_id, total_amount, payment_method, cash_received, change_amount
+                ) VALUES (:user_id, :total_amount, :payment_method, :cash_received, :change_amount)'
+            );
+
+            $saleQuery->execute([
+                'user_id' => $userId,
+                'total_amount' => $totalAmount,
+                'payment_method' => $paymentMethod,
+                'cash_received' => $cashReceived,
+                'change_amount' => $changeAmount,
+            ]);
+
+            $saleId = $this->conn->lastInsertId();
+
+            $productQuery = $this->conn->prepare(
+                'SELECT stock_quantity
+                FROM products
+                WHERE id = :product_id
+                FOR UPDATE'
+            );
+
+            $saleItemQuery = $this->conn->prepare(
+                'INSERT INTO sale_items ( sale_id, product_id, quantity, unit_price, subtotal
+                ) VALUES (:sale_id, :product_id, :quantity, :unit_price, :subtotal)'
+            );
+
+            $stockQuery = $this->conn->prepare(
+                'UPDATE products
+                SET stock_quantity = stock_quantity - :quantity
+                WHERE id = :product_id'
+            );
+
+            foreach ($items as $item) {
+                $productId = $item['id'];
+                $quantity = $item['quantity'];
+                $unitPrice = $item['price'];
+
+                $subtotal = $unitPrice * $quantity;
+
+                $productQuery->execute([
+                    'product_id' => $productId,
+                ]);
+
+                // Save.
+                $saleItemQuery->execute([
+                    'sale_id' => $saleId,
+                    'product_id' => $productId,
+                    'quantity' => $quantity,
+                    'unit_price' => $unitPrice,
+                    'subtotal' => $subtotal,
+                ]);
+
+                // Redice stock.
+                $stockQuery->execute([
+                    'quantity' => $quantity,
+                    'product_id' => $productId,
+                ]);
+            }
+
+            $this->conn->commit();
+
+            return $saleId;
+        } catch (Exception $e) {
+            if ($this->conn->inTransaction()) {
+                $this->conn->rollBack();
+            }
+            throw $e;
+        }
+    }
 }

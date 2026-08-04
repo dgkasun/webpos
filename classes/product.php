@@ -122,4 +122,29 @@ class Product
         ]);
         return $productQuery->fetchColumn();
     }
+
+    /* pos */
+    public function getAvailableForSale()
+    {
+        $productQuery = $this->conn->query(
+            'SELECT id, name, selling_price, stock_quantity, barcode
+            FROM products
+            WHERE is_active = 1 AND stock_quantity > 0
+            ORDER BY name ASC'
+        );
+        return $productQuery->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    public function findAvailable(int $id)
+    {
+        $productQuery = $this->conn->prepare(
+            'SELECT id, name, selling_price, stock_quantity
+            FROM products
+            WHERE id = :id AND is_active = 1'
+        );
+        $productQuery->execute([
+            'id' => $id,
+        ]);
+        return $productQuery->fetch(PDO::FETCH_ASSOC);
+    }
 }

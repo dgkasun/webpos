@@ -8,18 +8,25 @@ if (!isset($_SESSION['user_id'])) {
 }
 
 require_once __DIR__ . '/config/database.php';
+require_once __DIR__ . '/classes/Cart.php';
+require_once __DIR__ . '/classes/Sale.php';
 
-if (empty($_SESSION['cart'])) {
+$cart = new Cart();
+$saleManager = new Sale($conn);
+
+if ($cart->isEmpty()) {
     header('Location: pos.php');
     exit;
 }
 
 $error = '';
-$cartTotal = 0;
 
-foreach ($_SESSION['cart'] as $item) {
+$cartItems = $cart->getItems();
+$cartTotal = $cart->getTotal();
+
+/*foreach ($_SESSION['cart'] as $item) {
     $cartTotal += $item['price'] * $item['quantity'];
-}
+}*/
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $paymentMethod = $_POST['payment_method'] ?? 'cash';
@@ -32,13 +39,32 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         (
             $cashReceived === '' ||
             !is_numeric($cashReceived) ||
-            (float) $cashReceived < $cartTotal
+            $cashReceived < $cartTotal
         )
     ) {
         $error = 'Cash received must be equal to or greater than the total.';
     } else {
+        $cashReceivedAmount = null;
+        $changeAmount = null;
+
+        if ($paymentMethod === 'cash') {
+            $cashReceivedAmount = $cashReceived;
+            $changeAmount = $cashReceivedAmount - $cartTotal;
+        }
+
         try {
-            $conn->beginTransaction();
+            $saleId = $saleManager->create(
+                $_SESSION['user_id'],
+                $cartItems,
+                $cartTotal,
+                $paymentMethod,
+                $cashReceivedAmount,
+                $changeAmount
+            );
+
+            $cart->clear();
+
+            /*$conn->beginTransaction();
 
             $cashReceivedAmount = null;
             $changeAmount = null;
@@ -133,14 +159,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
             $conn->commit();
 
-            $_SESSION['cart'] = [];
+            $_SESSION['cart'] = [];*/
 
+            $cart->clear();
             header('Location: sale-success.php?id=' . $saleId);
             exit;
         } catch (Exception $e) {
-            if ($conn->inTransaction()) {
+            /*if ($conn->inTransaction()) {
                 $conn->rollBack();
-            }
+            }*/
 
             $error = $e->getMessage();
         }
@@ -178,7 +205,7 @@ $pageTitle = 'Checkout';
                     </tr>
                 </thead>
                 <tbody>
-                    <?php foreach ($_SESSION['cart'] as $item): ?>
+                    <?php foreach ($cartItems as $item): ?>
                         <?php $subtotal = $item['price'] * $item['quantity']; ?>
                         <tr>
                             <td><?= $item['name'] ?></td>
