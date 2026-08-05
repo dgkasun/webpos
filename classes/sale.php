@@ -145,4 +145,36 @@ class Sale
             throw $e;
         }
     }
+
+    /* sale report */
+    public function getByDateRange(string $fromDate, string $toDate)
+    {
+        $salesQuery = $this->conn->prepare(
+            'SELECT sales.id, sales.total_amount, sales.payment_method, sales.created_at, users.name AS cashier_name
+            FROM sales
+            INNER JOIN users ON users.id = sales.user_id
+            WHERE DATE(sales.created_at) BETWEEN :from_date AND :to_date
+            ORDER BY sales.created_at DESC'
+        );
+        $salesQuery->execute([
+            'from_date' => $fromDate,
+            'to_date' => $toDate,
+        ]);
+        return $salesQuery->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    public function getReportSummary(string $fromDate, string $toDate)
+    {
+        $summaryQuery = $this->conn->prepare(
+            'SELECT COUNT(DISTINCT sales.id) AS sale_count, COALESCE(SUM(sale_items.quantity), 0) AS items_sold, COALESCE(SUM(sales.total_amount), 0) AS sales_total
+            FROM sales
+            LEFT JOIN sale_items ON sale_items.sale_id = sales.id
+            WHERE DATE(sales.created_at) BETWEEN :from_date AND :to_date'
+        );
+        $summaryQuery->execute([
+            'from_date' => $fromDate,
+            'to_date' => $toDate,
+        ]);
+        return $summaryQuery->fetch(PDO::FETCH_ASSOC);
+    }
 }
