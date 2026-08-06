@@ -1,8 +1,8 @@
 <?php
 
 /**
- * Handles category data access.
- * Uses constructor injection.
+ * Category model.
+ * Uses constructor injection for the database connection.
  * Ref: Fowler, M. (2004) - https://martinfowler.com/articles/injection.html
  */
 
