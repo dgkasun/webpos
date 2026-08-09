@@ -1,0 +1,47 @@
+<?php include 'includes/header.php'; ?>
+
+<main class="wrap">
+
+    <?php include 'includes/menu.php'; ?>
+    <div class="container">
+        <div class="page-header">
+            <div>
+                <h1>Sales History</h1>
+            </div>
+        </div>
+
+        <?php if (empty($sales)): ?>
+            <p>No sales have been recorded.</p>
+        <?php else: ?>
+            <div class="table-wrapper">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Sale ID</th>
+                            <th>Date</th>
+                            <th>Cashier</th>
+                            <th>Payment</th>
+                            <th>Total</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        <?php foreach ($sales as $sale): ?>
+                            <tr>
+                                <td><?= $sale['id'] ?></td>
+                                <td><?= $sale['created_at'] ?></td>
+                                <td><?= $sale['cashier_name'] ?></td>
+                                <td><?= ucfirst($sale['payment_method']) ?></td>
+                                <td>Rs. <?= number_format($sale['total_amount'], 2) ?></td>
+                                <td><a href="receipt.php?id=<?= $sale['id'] ?>">View</a></td>
+                            </tr>
+                        <?php endforeach; ?>
+                    </tbody>
+                </table>
+            </div>
+        <?php endif; ?>
+    </div>
+</main>
+
+<?php include 'includes/footer.php'; ?>
