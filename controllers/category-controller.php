@@ -51,4 +51,46 @@ class CategoryController
         // Load the view.
         require __DIR__ . '/../views/categories/index.php';
     }
+
+    public function edit(int $categoryId): void
+    {
+        $message = '';
+        $error = '';
+
+        // Get the selected category.
+        $category = $this->categoryManager->find($categoryId);
+
+        if (!$category) {
+            exit('Category not found.');
+        }
+
+        // Process the update category request.
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $name = trim($_POST['name'] ?? '');
+            $description = trim($_POST['description'] ?? '');
+            $isActive = isset($_POST['is_active']) ? 1 : 0;
+
+            if ($name === '') {
+                $error = 'Category name is required.';
+            } else {
+                try {
+                    $this->categoryManager->update($categoryId, $name, $description, $isActive);
+                    $message = 'Category updated successfully.';
+                    $category = $this->categoryManager->find($categoryId);
+                } catch (PDOException $e) {
+                    if ($e->getCode() === '23000') {
+                        $error = 'This category already exists.';
+                    } else {
+                        $error = 'Unable to update the category.';
+                    }
+                }
+            }
+        }
+
+        $pageTitle = 'Edit Category';
+        $currentPage = 'Categories';
+
+        // Load the edit view.
+        require __DIR__ . '/../views/categories/edit.php';
+    }
 }
