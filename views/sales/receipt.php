@@ -1,0 +1,95 @@
+<?php
+
+/** @var array $sale */
+/** @var array $saleItems */
+?>
+
+<?php include 'includes/header.php'; ?>
+
+<main class="wrap">
+
+    <?php include 'includes/menu.php'; ?>
+    <div class="container">
+
+        <div class="receipt-actions">
+            <a href="sales-history.php">Back to Sales History</a>
+
+            <button type="button" onclick="window.print()">
+                Print Receipt
+            </button>
+        </div>
+
+        <div class="receipt-header">
+            <h1>Sales Receipt</h1>
+        </div>
+
+        <div class="receipt-details">
+            <p>
+                <strong>Sale ID:</strong>
+                <?= $sale['id'] ?>
+            </p>
+
+            <p>
+                <strong>Date:</strong>
+                <?= $sale['created_at'] ?>
+            </p>
+
+            <p>
+                <strong>Cashier:</strong>
+                <?= $sale['cashier_name'] ?>
+            </p>
+
+            <p>
+                <strong>Payment:</strong>
+                <?= ucfirst($sale['payment_method']) ?>
+            </p>
+            <?php if ($sale['payment_method'] === 'cash'): ?>
+                <p>
+                    <strong>Cash Received:</strong>
+                    Rs. <?= number_format($sale['cash_received'], 2) ?>
+                </p>
+
+                <p>
+                    <strong>Change:</strong>
+                    Rs. <?= number_format($sale['change_amount'], 2) ?>
+                </p>
+            <?php endif; ?>
+
+        </div>
+
+        <div class="table-wrapper">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Product</th>
+                        <th>Price</th>
+                        <th>Qty</th>
+                        <th>Subtotal</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    <?php foreach ($saleItems as $item): ?>
+                        <tr>
+                            <td><?= $item['product_name'] ?></td>
+                            <td>Rs.<?= number_format($item['unit_price'], 2) ?></td>
+                            <td><?= $item['quantity'] ?></td>
+                            <td>Rs. <?= number_format($item['subtotal'], 2) ?>
+                            </td>
+                        </tr>
+                    <?php endforeach; ?>
+                </tbody>
+
+                <tfoot>
+                    <tr>
+                        <th colspan="3">Total</th>
+                        <th>Rs. <?= number_format($sale['total_amount'], 2) ?>
+                        </th>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
+    </div>
+</main>
+
+<?php include 'includes/footer.php'; ?>
