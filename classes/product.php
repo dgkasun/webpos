@@ -51,6 +51,8 @@ class Product
             'selling_price' => $sellingPrice,
             'stock_quantity' => $stockQuantity,
         ]);
+
+        // Generate the barcode using the new product ID.
         $productId = $this->conn->lastInsertId();
 
         $barcode = 'WEB' . str_pad($productId, 8, '0', STR_PAD_LEFT);
@@ -123,7 +125,7 @@ class Product
         return $productQuery->fetchColumn();
     }
 
-    /* pos */
+    /* POS - Product queries*/
     public function getAvailableForSale()
     {
         $productQuery = $this->conn->query(
