@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Handles sale requests.
+ * Handles sale and report requests.
  */
 class SaleController
 {
@@ -40,5 +40,33 @@ class SaleController
 
         // Load the receipt view.
         require __DIR__ . '/../views/sales/receipt.php';
+    }
+
+    public function report(): void
+    {
+        $fromDate = $_GET['from_date'] ?? date('Y-m-01');
+        $toDate = $_GET['to_date'] ?? date('Y-m-d');
+
+        $error = '';
+        $sales = [];
+        $summary = [
+            'sale_count' => 0,
+            'sales_total' => 0,
+            'items_sold' => 0,
+        ];
+
+        if ($fromDate > $toDate) {
+            $error = 'From date cannot be later than To date.';
+        } else {
+            // Get sales and summary data for the selected date range.
+            $sales = $this->saleManager->getByDateRange($fromDate, $toDate);
+            $summary = $this->saleManager->getReportSummary($fromDate, $toDate);
+        }
+
+        $pageTitle = 'Sales Report';
+        $currentPage = 'Reports';
+
+        // Load the report view.
+        require __DIR__ . '/../views/sales/report.php';
     }
 }
