@@ -119,6 +119,15 @@ class Sale
                     'product_id' => $productId,
                 ]);
 
+                // Check the stock before completing.
+                $product = $productQuery->fetch(PDO::FETCH_ASSOC);
+                if (!$product) {
+                    throw new Exception('Product not found.');
+                }
+                if ($quantity > $product['stock_quantity']) {
+                    throw new Exception('Not enough stock available.');
+                }
+
                 // Save.
                 $saleItemQuery->execute([
                     'sale_id' => $saleId,
