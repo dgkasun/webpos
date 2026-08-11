@@ -75,9 +75,17 @@ class SaleController
     {
         // Get completed sale data.
         $sale = $this->saleManager->find($saleId);
+        $saleItems = $this->saleManager->getItems($saleId);
 
         if (!$sale) {
             exit('Sale not found.');
+        }
+
+        $numberOfItems = count($saleItems);
+        $totalQuantity = 0;
+
+        foreach ($saleItems as $item) {
+            $totalQuantity += $item['quantity'];
         }
 
         $pageTitle = 'Sale Complete';

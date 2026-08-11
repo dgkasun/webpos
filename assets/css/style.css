@@ -286,3 +286,67 @@ input[type=checkbox] {
 .product-result span {
     font-size: 14px;
 }
+
+/* success */
+.product-details-table th{
+    background: #fff;
+}
+.total-rows th {
+    border: 0; 
+    background: #fff;
+    font-weight: 400;
+    padding: 3px;
+}
+.total-rows tr:first-child th {
+    font-weight: bold;
+}
+.footer-receipt-table {
+    border-top: 1px solid #ddd;
+}
+.emptyrow td {
+    padding-bottom: 0px; 
+    border: 0;
+}
+.centeritem {
+    text-align: center;
+}
+.bolditem {
+    font-weight: bold;
+}
+.rightitem {
+    text-align: right;
+}
+
+.product-details-table td {
+    padding-top: 8px;
+    padding-bottom: 8px;
+}
+
+@media print {
+
+    @page {
+        size: 80mm auto;
+        margin: 0;
+    }
+
+    body * {
+        visibility: hidden;
+    }
+
+    .receipt-print,
+    .receipt-print * {
+        visibility: visible;
+    }
+
+    .receipt-print {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 80mm;
+        padding: 3mm;
+    }
+    .product-details-table {
+        font-size: 13px;
+        border-top: 1px solid #ddd;
+    }
+}

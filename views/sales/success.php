@@ -7,46 +7,96 @@
 
 <main class="wrap">
     <div class="container">
+        <div class="receipt-print">
+            <table>
+                <tr>
+                    <td class="centeritem">
+                        POS TEXTILE<br>
+                        Colombo, SRI LANKA<br>
+                        Phone: 0123456789
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        Invoice No: <?= $sale['id'] ?><Br>
+                        Date & Time: <?= $sale['created_at'] ?>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="centeritem bolditem">INVOICE</td>
+                </tr>
+            </table>
 
-        <h1>Sale Completed</h1>
-        <table>
-            <tr>
-                <th>Sale ID</th>
-                <td><?= $sale['id'] ?></td>
-            </tr>
-            <tr>
-                <th>Total</th>
-                <td>Rs. <?= number_format($sale['total_amount'], 2) ?></td>
-            </tr>
-            <tr>
-                <th>Payment</th>
-                <td><?= ucfirst($sale['payment_method']) ?></td>
-            </tr>
-            <tr>
-                <th>Date</th>
-                <td><?= $sale['created_at'] ?></td>
-            </tr>
-        </table>
-
-        <?php if ($sale['payment_method'] === 'cash'): ?>
-
-            <p>
-                <strong>Cash Received:</strong>
-                Rs. <?= number_format($sale['cash_received'], 2) ?>
-            </p>
-
-            <p>
-                <strong>Change:</strong>
-                Rs. <?= number_format($sale['change_amount'], 2) ?>
-            </p>
-
-        <?php endif; ?>
+            <div class="table-wrapper">
+                <table class="receipt-table product-details-table">
+                    <thead>
+                        <tr>
+                            <th>Item</th>
+                            <th>Qty</th>
+                            <th>Price</th>
+                            <th>Amount</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php
+                        foreach ($saleItems as $item): ?>
+                            <tr>
+                                <td><?= $item['product_name'] ?></td>
+                                <td><?= $item['quantity'] ?></td>
+                                <td><?= number_format($item['unit_price'], 2) ?></td>
+                                <td><?= number_format($item['subtotal'], 2) ?></td>
+                            </tr>
+                        <?php endforeach; ?>
+                        <tr class="emptyrow">
+                            <td colspan="4"></td>
+                        </tr>
+                    </tbody>
+                    <tfoot class="total-rows">
+                        <tr>
+                            <th colspan="3" class="rightitem">Net Total:</th>
+                            <th><?= number_format($sale['total_amount'], 2) ?></th>
+                        </tr>
+                        <?php if ($sale['payment_method'] === 'cash'): ?>
+                            <tr>
+                                <th colspan="3" class="rightitem">Cash:</th>
+                                <th><?= number_format($sale['cash_received'], 2) ?></th>
+                            </tr>
+                            <tr>
+                                <th colspan="3" class="rightitem">Cash Balance:</th>
+                                <th><?= number_format($sale['change_amount'], 2) ?></th>
+                            </tr>
+                        <?php else: ?>
+                            <tr>
+                                <th colspan="3"><?= ucfirst($sale['payment_method']) ?></th>
+                                <th><?= number_format($sale['total_amount'], 2) ?></th>
+                            </tr>
+                        <?php endif; ?>
+                    </tfoot>
+                </table>
+            </div>
+            <br>
+            <table class="footer-receipt-table">
+                <tr>
+                    <td>
+                        No of Items : <?= $numberOfItems ?>
+                    </td>
+                    <td>
+                        Total Quantity : <?= $totalQuantity ?>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2" class="centeritem">
+                        THANK YOU.. COME AGAIN.!!!
+                    </td>
+                </tr>
+            </table>
+        </div>
 
         <br>
-
         <a class="button" href="pos.php">New Sale</a>
         <button onclick="window.print();">Print Receipt</button>
 
+    </div>
 </main>
 
 <?php include 'includes/footer.php'; ?>
