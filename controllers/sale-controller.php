@@ -69,4 +69,20 @@ class SaleController
         // Load the report view.
         require __DIR__ . '/../views/sales/report.php';
     }
+
+
+    public function success(int $saleId): void
+    {
+        // Get completed sale data.
+        $sale = $this->saleManager->find($saleId);
+
+        if (!$sale) {
+            exit('Sale not found.');
+        }
+
+        $pageTitle = 'Sale Complete';
+
+        // Load the sale success view.
+        require __DIR__ . '/../views/sales/success.php';
+    }
 }
