@@ -63,11 +63,32 @@
         <?php endif; ?>
 
         <hr>
+        <div class="all-products">
+            <div>
+                <h2>Existing Products</h2>
+            </div>
+            <div class="product-search">
+                <form method="get" class="product-search-form">
+                    <div class="form-group">
+                        <input type="text" id="search" name="search" value="<?= $search ?>" placeholder="Search Product, barcode or category">
+                    </div>
+                    <div><button type="submit">Search</button></div>
+                    <?php if ($search !== ''): ?>
+                        <div><a class="button-link" href="products.php">Clear</a></div>
+                    <?php endif; ?>
+                </form>
+            </div>
+        </div>
 
-        <h2>Existing Products</h2>
+
+
 
         <?php if (empty($products)): ?>
-            <p>No products have been added.</p>
+            <?php if ($search !== ''): ?>
+                <p>No products found for "<?= $search ?>".</p>
+            <?php else: ?>
+                <p>No products have been added.</p>
+            <?php endif; ?>
         <?php else: ?>
             <div class="table-wrapper">
                 <table>

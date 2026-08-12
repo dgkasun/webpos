@@ -18,6 +18,8 @@ class ProductController
         $message = '';
         $error = '';
 
+        $search = trim($_GET['search'] ?? '');
+
         $categories = $this->productManager->getActiveCategories();
 
         // Process the add product request.
@@ -63,8 +65,13 @@ class ProductController
             }
         }
 
-        // Get product data.
-        $products = $this->productManager->getAll();
+        if ($search !== '') {
+            // Search products
+            $products = $this->productManager->search($search);
+        } else {
+            // Get product data.
+            $products = $this->productManager->getAll();
+        }
 
         $pageTitle = 'Products';
         $currentPage = 'Products';

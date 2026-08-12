@@ -350,3 +350,18 @@ input[type=checkbox] {
         border-top: 1px solid #ddd;
     }
 }
+
+/* search product */
+.all-products {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+}
+.product-search-form {
+    display: flex;
+    gap: 10px;
+}
+
+.product-search-form #search {
+    width: 250px;
+}
