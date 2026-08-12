@@ -164,4 +164,56 @@ class Product
         ]);
         return $productQuery->fetchAll(PDO::FETCH_ASSOC);
     }
+
+
+    public function getPaginated(string $search, int $limit, int $offset)
+    {
+
+        $sql = 'SELECT products.id, products.name, products.barcode, products.cost_price, products.selling_price, products.stock_quantity, products.is_active, categories.name AS category_name
+                FROM products
+                INNER JOIN categories ON categories.id = products.category_id';
+
+        if ($search !== '') {
+            $sql .= ' WHERE products.name LIKE :search
+                    OR products.barcode LIKE :search
+                    OR categories.name LIKE :search';
+        }
+
+        $sql .= " ORDER BY products.name ASC
+                LIMIT $limit OFFSET $offset";
+
+        $productQuery = $this->conn->prepare($sql);
+
+        if ($search !== '') {
+            $productQuery->execute(['search' => '%' . $search . '%',]);
+        } else {
+            $productQuery->execute();
+        }
+
+        return $productQuery->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    public function getFilteredCount(string $search)
+    {
+        $sql = 'SELECT COUNT(*)
+                FROM products
+                INNER JOIN categories
+                ON categories.id = products.category_id';
+
+        if ($search !== '') {
+            $sql .= 'WHERE products.name LIKE :search
+                    OR products.barcode LIKE :search
+                    OR categories.name LIKE :search';
+        }
+
+        $productQuery = $this->conn->prepare($sql);
+
+        if ($search !== '') {
+            $productQuery->execute(['search' => '%' . $search . '%',]);
+        } else {
+            $productQuery->execute();
+        }
+
+        return $productQuery->fetchColumn();
+    }
 }

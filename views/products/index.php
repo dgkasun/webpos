@@ -118,6 +118,34 @@
                         <?php endforeach; ?>
                     </tbody>
                 </table>
+
+                <?php if ($totalPages > 1): ?>
+                    <div class="pagination">
+                        <?php if ($page > 1): ?>
+                            <a href="products.php?search=<?= urlencode($search) ?>&page=<?= $page - 1 ?>">
+                                Previous
+                            </a>
+                        <?php endif; ?>
+                        <?php for ($i = 1; $i <= $totalPages; $i++): ?>
+                            <?php if ($i === $page): ?>
+                                <span class="active">
+                                    <?= $i ?>
+                                </span>
+                            <?php else: ?>
+                                <a href="products.php?search=<?= urlencode($search) ?>&page=<?= $i ?>">
+                                    <?= $i ?>
+                                </a>
+                            <?php endif; ?>
+                        <?php endfor; ?>
+
+                        <?php if ($page < $totalPages): ?>
+                            <a href="products.php?search=<?= urlencode($search) ?>&page=<?= $page + 1 ?>">
+                                Next
+                            </a>
+                        <?php endif; ?>
+                    </div>
+                <?php endif; ?>
+
             </div>
         <?php endif; ?>
     </div>

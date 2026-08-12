@@ -20,6 +20,14 @@ class ProductController
 
         $search = trim($_GET['search'] ?? '');
 
+        $page = $_GET['page'] ?? 1;
+
+        if ($page < 1) {
+            $page = 1;
+        }
+
+        $perPage = 10;
+
         $categories = $this->productManager->getActiveCategories();
 
         // Process the add product request.
@@ -65,13 +73,22 @@ class ProductController
             }
         }
 
-        if ($search !== '') {
+        /*if ($search !== '') {
             // Search products
             $products = $this->productManager->search($search);
         } else {
             // Get product data.
             $products = $this->productManager->getAll();
+        }*/
+
+        $totalProducts = $this->productManager->getFilteredCount($search);
+        $totalPages = max(1, ceil($totalProducts / $perPage));
+        if ($page > $totalPages) {
+            $page = $totalPages;
         }
+        $offset = ($page - 1) * $perPage;
+        // Get products for the current page.
+        $products = $this->productManager->getPaginated($search, $perPage, $offset);
 
         $pageTitle = 'Products';
         $currentPage = 'Products';
