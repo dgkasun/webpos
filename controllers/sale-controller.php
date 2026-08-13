@@ -75,6 +75,7 @@ class SaleController
             'sales_total' => 0,
             'items_sold' => 0,
         ];
+        $bestSellingProducts = [];
 
         if ($fromDate > $toDate) {
             $error = 'From date cannot be later than To date.';
@@ -82,6 +83,9 @@ class SaleController
             // Get sales and summary data for the selected date range.
             $sales = $this->saleManager->getByDateRange($fromDate, $toDate);
             $summary = $this->saleManager->getReportSummary($fromDate, $toDate);
+
+            // Get the five best-selling products.
+            $bestSellingProducts = $this->saleManager->getBestSellingProducts($fromDate, $toDate);
         }
 
         $pageTitle = 'Sales Report';

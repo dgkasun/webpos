@@ -55,8 +55,34 @@
                 <p class="dashboard-number"><?= $summary['items_sold'] ?></p>
             </div>
         </div>
+        <Br>
 
-        <hr>
+        <h2>Best Selling Products</h2>
+        <?php if (empty($bestSellingProducts)): ?>
+            <p>No product sales found for this date range.</p>
+        <?php else: ?>
+            <div class="table-wrapper">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Product</th>
+                            <th>Quantity Sold</th>
+                            <th>Sales Amount</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php foreach ($bestSellingProducts as $product): ?>
+                            <tr>
+                                <td><?= $product['product_name'] ?></td>
+                                <td><?= $product['quantity_sold'] ?></td>
+                                <td>Rs. <?= number_format($product['sales_amount'], 2) ?></td>
+                            </tr>
+                        <?php endforeach; ?>
+                    </tbody>
+                </table>
+            </div>
+        <?php endif; ?>
+        <Br>
 
         <h2>Sales</h2>
 
@@ -90,6 +116,8 @@
                 </table>
             </div>
         <?php endif; ?>
+
+
 
     </div>
 </main>

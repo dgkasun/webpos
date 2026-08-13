@@ -273,4 +273,30 @@ class Sale
 
         return $salesQuery->fetchColumn();
     }
+
+    /* report */
+    public function getBestSellingProducts(string $fromDate, string $toDate)
+    {
+        $productQuery = $this->conn->prepare(
+            'SELECT products.name AS product_name,
+                SUM(sale_items.quantity) AS quantity_sold,
+                SUM(sale_items.subtotal) AS sales_amount
+            FROM sale_items
+            INNER JOIN sales
+                ON sales.id = sale_items.sale_id
+            INNER JOIN products
+                ON products.id = sale_items.product_id
+            WHERE DATE(sales.created_at) BETWEEN :from_date AND :to_date
+            GROUP BY products.id, products.name
+            ORDER BY quantity_sold DESC
+            LIMIT 5'
+        );
+
+        $productQuery->execute([
+            'from_date' => $fromDate,
+            'to_date' => $toDate,
+        ]);
+
+        return $productQuery->fetchAll(PDO::FETCH_ASSOC);
+    }
 }
