@@ -16,7 +16,7 @@
         <div class="page-header">
             <div>
                 <h1>Dashboard</h1>
-                <p>Welcome, <?= $_SESSION['user_name'] ?>.</p>
+                <p>Welcome, <?= htmlspecialchars($_SESSION['user_name']) ?>.</p>
             </div>
 
         </div>

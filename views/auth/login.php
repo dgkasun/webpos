@@ -1,3 +1,8 @@
+<?php
+
+/** @var string $error */
+?>
+
 <?php include 'includes/header.php'; ?>
 
 <main class="wrap">
