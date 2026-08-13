@@ -205,4 +205,72 @@ class Sale
 
         return $summary;
     }
+
+    /* sales filter */
+    public function getFiltered(string $fromDate, string $toDate, int $saleId, int $limit, int $offset)
+    {
+        $limit = (int) $limit;
+        $offset = (int) $offset;
+
+        $sql =
+            'SELECT sales.id, sales.total_amount, sales.payment_method, sales.created_at, users.name AS cashier_name
+            FROM sales
+            INNER JOIN users
+                ON users.id = sales.user_id
+            WHERE 1=1';
+
+        $params = [];
+
+        if ($fromDate !== '') {
+            $sql .= ' AND DATE(sales.created_at) >= :from_date';
+            $params['from_date'] = $fromDate;
+        }
+
+        if ($toDate !== '') {
+            $sql .= ' AND DATE(sales.created_at) <= :to_date';
+            $params['to_date'] = $toDate;
+        }
+
+        if ($saleId > 0) {
+            $sql .= ' AND sales.id = :sale_id';
+            $params['sale_id'] = $saleId;
+        }
+
+        $sql .= " ORDER BY sales.created_at DESC
+                LIMIT $limit OFFSET $offset";
+
+        $salesQuery = $this->conn->prepare($sql);
+        $salesQuery->execute($params);
+
+        return $salesQuery->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    public function getFilteredCount(string $fromDate, string $toDate, int $saleId)
+    {
+        $sql = 'SELECT COUNT(*) 
+                FROM sales 
+                WHERE 1=1';
+
+        $params = [];
+
+        if ($fromDate !== '') {
+            $sql .= ' AND DATE(created_at) >= :from_date';
+            $params['from_date'] = $fromDate;
+        }
+
+        if ($toDate !== '') {
+            $sql .= ' AND DATE(created_at) <= :to_date';
+            $params['to_date'] = $toDate;
+        }
+
+        if ($saleId > 0) {
+            $sql .= ' AND id = :sale_id';
+            $params['sale_id'] = $saleId;
+        }
+
+        $salesQuery = $this->conn->prepare($sql);
+        $salesQuery->execute($params);
+
+        return $salesQuery->fetchColumn();
+    }
 }

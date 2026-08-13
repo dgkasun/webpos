@@ -15,8 +15,29 @@ class SaleController
 
     public function history(): void
     {
-        // Get sales history data.
-        $sales = $this->saleManager->getAll();
+        $fromDate = trim($_GET['from_date'] ?? '');
+        $toDate = trim($_GET['to_date'] ?? '');
+        $saleId = (int) ($_GET['sale_id'] ?? 0);
+        $page = (int) ($_GET['page'] ?? 1);
+
+        if ($page < 1) {
+            $page = 1;
+        }
+
+        $perPage = 10;
+
+        $totalSales = $this->saleManager->getFilteredCount($fromDate, $toDate, $saleId);
+
+        $totalPages = max(1, ceil($totalSales / $perPage));
+
+        if ($page > $totalPages) {
+            $page = $totalPages;
+        }
+
+        $offset = ($page - 1) * $perPage;
+
+        // Get sales for the current page.
+        $sales = $this->saleManager->getFiltered($fromDate, $toDate, $saleId, $perPage, $offset);
 
         $pageTitle = 'Sales History';
         $currentPage = 'Sales History';
