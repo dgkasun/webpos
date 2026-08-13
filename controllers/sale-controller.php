@@ -55,7 +55,7 @@ class SaleController
             exit('Sale not found.');
         }
 
-        // Get items to the sale.
+        // Get items belonging to the sale.
         $saleItems = $this->saleManager->getItems($saleId);
 
         $pageTitle = 'Receipt';
@@ -102,11 +102,12 @@ class SaleController
     {
         // Get completed sale data.
         $sale = $this->saleManager->find($saleId);
-        $saleItems = $this->saleManager->getItems($saleId);
 
         if (!$sale) {
             exit('Sale not found.');
         }
+
+        $saleItems = $this->saleManager->getItems($saleId);
 
         $numberOfItems = count($saleItems);
         $totalQuantity = 0;
