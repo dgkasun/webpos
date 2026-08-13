@@ -15,18 +15,6 @@ class Product
         $this->conn = $conn;
     }
 
-    public function getAll(): array
-    {
-        $productQuery = $this->conn->query(
-            'SELECT products.id, products.name, products.barcode, products.cost_price, products.selling_price, products.stock_quantity, products.is_active, categories.name AS category_name
-             FROM products
-             INNER JOIN categories
-                ON categories.id = products.category_id
-             ORDER BY products.name ASC'
-        );
-        return $productQuery->fetchAll(PDO::FETCH_ASSOC);
-    }
-
     public function getActiveCategories(): array
     {
         $categoryQuery = $this->conn->query(
@@ -149,22 +137,6 @@ class Product
         ]);
         return $productQuery->fetch(PDO::FETCH_ASSOC);
     }
-
-    public function search(string $search)
-    {
-        $productQuery = $this->conn->prepare(
-            'SELECT products.id, products.name, products.barcode, products.cost_price, products.selling_price, products.stock_quantity, products.is_active, categories.name AS category_name
-            FROM products
-            INNER JOIN categories ON categories.id = products.category_id
-            WHERE products.name LIKE :search OR products.barcode LIKE :search OR categories.name LIKE :search
-            ORDER BY products.name ASC'
-        );
-        $productQuery->execute([
-            'search' => '%' . $search . '%',
-        ]);
-        return $productQuery->fetchAll(PDO::FETCH_ASSOC);
-    }
-
 
     public function getPaginated(string $search, int $limit, int $offset)
     {

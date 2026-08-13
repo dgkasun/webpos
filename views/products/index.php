@@ -1,3 +1,14 @@
+<?php
+
+/** @var string $message */
+/** @var string $error */
+/** @var array $products */
+/** @var array $categories */
+/** @var string $search */
+/** @var int $page */
+/** @var int $totalPages */
+?>
+
 <?php include 'includes/header.php'; ?>
 
 <main class="wrap">
@@ -12,13 +23,13 @@
 
         <?php if ($message !== ''): ?>
             <p class="success">
-                <?= $message ?>
+                <?= htmlspecialchars($message) ?>
             </p>
         <?php endif; ?>
 
         <?php if ($error !== ''): ?>
             <p class="error">
-                <?= $error ?>
+                <?= htmlspecialchars($error) ?>
             </p>
         <?php endif; ?>
 
@@ -40,14 +51,14 @@
                             <option value="">Select a category</option>
                             <?php foreach ($categories as $category): ?>
                                 <option value="<?= $category['id'] ?>">
-                                    <?= $category['name'] ?>
+                                    <?= htmlspecialchars($category['name']) ?>
                                 </option>
                             <?php endforeach; ?>
                         </select>
                     </div>
                     <div class="form-group">
                         <label for="cost_price">Cost Price</label>
-                        <input type="number" id="cost_price" name="cost_price" min="0" step="0.01 value=" 0.00" required>
+                        <input type="number" id="cost_price" name="cost_price" min="0" step="0.01" value="0.00" required>
                     </div>
                     <div class="form-group">
                         <label for="selling_price">Selling Price</label>
@@ -70,7 +81,7 @@
             <div class="product-search">
                 <form method="get" class="product-search-form">
                     <div class="form-group">
-                        <input type="text" id="search" name="search" value="<?= $search ?>" placeholder="Search Product, barcode or category">
+                        <input type="text" id="search" name="search" value="<?= htmlspecialchars($search) ?>" placeholder="Search Product, barcode or category">
                     </div>
                     <div><button type="submit">Search</button></div>
                     <?php if ($search !== ''): ?>
@@ -80,12 +91,9 @@
             </div>
         </div>
 
-
-
-
         <?php if (empty($products)): ?>
             <?php if ($search !== ''): ?>
-                <p>No products found for "<?= $search ?>".</p>
+                <p>No products found for "<?= htmlspecialchars($search) ?>".</p>
             <?php else: ?>
                 <p>No products have been added.</p>
             <?php endif; ?>
@@ -107,8 +115,8 @@
                     <tbody>
                         <?php foreach ($products as $product): ?>
                             <tr>
-                                <td><?= ($product['name']) ?></td>
-                                <td><?= $product['category_name'] ?></td>
+                                <td><?= htmlspecialchars($product['name']) ?></td>
+                                <td><?= htmlspecialchars($product['category_name']) ?></td>
                                 <td>Rs. <?= number_format($product['cost_price'], 2) ?></td>
                                 <td>Rs. <?= number_format($product['selling_price'], 2) ?></td>
                                 <td><?= $product['stock_quantity'] ?></td>

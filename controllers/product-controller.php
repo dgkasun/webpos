@@ -73,14 +73,6 @@ class ProductController
             }
         }
 
-        /*if ($search !== '') {
-            // Search products
-            $products = $this->productManager->search($search);
-        } else {
-            // Get product data.
-            $products = $this->productManager->getAll();
-        }*/
-
         $totalProducts = $this->productManager->getFilteredCount($search);
         $totalPages = max(1, ceil($totalProducts / $perPage));
         if ($page > $totalPages) {
