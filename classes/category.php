@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Category model.
+ * Category model for category data.
  * Uses constructor injection for the database connection.
  * Ref: Fowler, M. (2004) - https://martinfowler.com/articles/injection.html
  */
@@ -70,11 +70,11 @@ class Category
         ]);
     }
 
-    public function getCount()
+    public function getCount(): int
     {
         $categoryQuery = $this->conn->query(
             'SELECT COUNT(*) FROM categories'
         );
-        return $categoryQuery->fetchColumn();
+        return (int) $categoryQuery->fetchColumn();
     }
 }

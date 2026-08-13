@@ -1,3 +1,10 @@
+<?php
+
+/** @var array $categories */
+/** @var string $message */
+/** @var string $error */
+?>
+
 <?php include 'includes/header.php'; ?>
 
 <main class="wrap">
@@ -12,13 +19,13 @@
 
         <?php if ($message !== ''): ?>
             <p class="success">
-                <?= $message ?>
+                <?= htmlspecialchars($message) ?>
             </p>
         <?php endif; ?>
 
         <?php if ($error !== ''): ?>
             <p class="error">
-                <?= $error ?>
+                <?= htmlspecialchars($error) ?>
             </p>
         <?php endif; ?>
 
@@ -55,8 +62,8 @@
                     <tbody>
                         <?php foreach ($categories as $category): ?>
                             <tr>
-                                <td><?= $category['name'] ?></td>
-                                <td><?= $category['description'] ?? '' ?></td>
+                                <td><?= htmlspecialchars($category['name']) ?></td>
+                                <td><?= htmlspecialchars($category['description'] ?? '') ?></td>
                                 <td><?= $category['is_active'] ? 'Active' : 'Inactive' ?></td>
                                 <td><a href="edit-category.php?id=<?= (int) $category['id'] ?>">Edit</a></td>
                             </tr>

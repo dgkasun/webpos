@@ -3,7 +3,6 @@
 /**
  * Handles category requests between the model and views.
  * Ref: Fowler, M. (2002) Patterns of Enterprise Application Architecture - https://sar.ac.id/stmik_ebook/prog_file_file/EFCofwzsj0.pdf
- * Ref: Fowler, M. (2004) Inversion of Control Containers and the Dependency Injection pattern - https://martinfowler.com/articles/injection.html
  */
 
 class CategoryController
