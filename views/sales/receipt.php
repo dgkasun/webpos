@@ -31,17 +31,17 @@
 
             <p>
                 <strong>Date:</strong>
-                <?= $sale['created_at'] ?>
+                <?= htmlspecialchars($sale['created_at']) ?>
             </p>
 
             <p>
                 <strong>Cashier:</strong>
-                <?= $sale['cashier_name'] ?>
+                <?= htmlspecialchars($sale['cashier_name']) ?>
             </p>
 
             <p>
                 <strong>Payment:</strong>
-                <?= ucfirst($sale['payment_method']) ?>
+                <?= htmlspecialchars(ucfirst($sale['payment_method'])) ?>
             </p>
             <?php if ($sale['payment_method'] === 'cash'): ?>
                 <p>
@@ -71,7 +71,7 @@
                 <tbody>
                     <?php foreach ($saleItems as $item): ?>
                         <tr>
-                            <td><?= $item['product_name'] ?></td>
+                            <td><?= htmlspecialchars($item['product_name']) ?></td>
                             <td>Rs.<?= number_format($item['unit_price'], 2) ?></td>
                             <td><?= $item['quantity'] ?></td>
                             <td>Rs. <?= number_format($item['subtotal'], 2) ?>

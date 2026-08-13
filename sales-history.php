@@ -8,7 +8,7 @@ if (!isset($_SESSION['user_id'])) {
 }
 
 require_once __DIR__ . '/config/database.php';
-require_once __DIR__ . '/classes/Sale.php';
+require_once __DIR__ . '/classes/sale.php';
 require_once __DIR__ . '/controllers/sale-controller.php';
 
 $saleManager = new Sale($conn);

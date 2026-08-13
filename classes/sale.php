@@ -15,18 +15,6 @@ class Sale
         $this->conn = $conn;
     }
 
-    public function getAll(): array
-    {
-        $salesQuery = $this->conn->query(
-            'SELECT sales.id, sales.total_amount, sales.payment_method, sales.created_at, users.name AS cashier_name
-             FROM sales
-             INNER JOIN users
-                ON users.id = sales.user_id
-             ORDER BY sales.created_at DESC'
-        );
-        return $salesQuery->fetchAll(PDO::FETCH_ASSOC);
-    }
-
     public function find(int $id): array|false
     {
         $saleQuery = $this->conn->prepare(
@@ -137,7 +125,7 @@ class Sale
                     'subtotal' => $subtotal,
                 ]);
 
-                // Redice stock.
+                // Reduce stock.
                 $stockQuery->execute([
                     'quantity' => $quantity,
                     'product_id' => $productId,
@@ -209,9 +197,6 @@ class Sale
     /* sales filter */
     public function getFiltered(string $fromDate, string $toDate, int $saleId, int $limit, int $offset)
     {
-        $limit = (int) $limit;
-        $offset = (int) $offset;
-
         $sql =
             'SELECT sales.id, sales.total_amount, sales.payment_method, sales.created_at, users.name AS cashier_name
             FROM sales

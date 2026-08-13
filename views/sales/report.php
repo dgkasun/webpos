@@ -1,8 +1,11 @@
 <?php
 
+/** @var string $error */
 /** @var string $fromDate */
 /** @var string $toDate */
 /** @var array $summary */
+/** @var array $bestSellingProducts */
+/** @var array $sales */
 ?>
 
 <?php include 'includes/header.php'; ?>
@@ -21,7 +24,7 @@
 
         <?php if ($error !== ''): ?>
             <p class="error">
-                <?= $error ?>
+                <?= htmlspecialchars($error) ?>
             </p>
         <?php endif; ?>
 
@@ -29,11 +32,11 @@
             <div class="form-grid">
                 <div class="form-group">
                     <label for="from_date">From Date</label>
-                    <input type="date" id="from_date" name="from_date" value="<?= $fromDate ?>" required>
+                    <input type="date" id="from_date" name="from_date" value="<?= htmlspecialchars($fromDate) ?>" required>
                 </div>
                 <div class="form-group">
                     <label for="to_date">To Date</label>
-                    <input type="date" id="to_date" name="to_date" value="<?= $toDate ?>" required>
+                    <input type="date" id="to_date" name="to_date" value="<?= htmlspecialchars($toDate) ?>" required>
                 </div>
             </div>
             <button type="submit">View Report</button>
@@ -55,7 +58,7 @@
                 <p class="dashboard-number"><?= $summary['items_sold'] ?></p>
             </div>
         </div>
-        <Br>
+        <br>
 
         <h2>Best Selling Products</h2>
         <?php if (empty($bestSellingProducts)): ?>
@@ -73,7 +76,7 @@
                     <tbody>
                         <?php foreach ($bestSellingProducts as $product): ?>
                             <tr>
-                                <td><?= $product['product_name'] ?></td>
+                                <td><?= htmlspecialchars($product['product_name']) ?></td>
                                 <td><?= $product['quantity_sold'] ?></td>
                                 <td>Rs. <?= number_format($product['sales_amount'], 2) ?></td>
                             </tr>
@@ -82,7 +85,7 @@
                 </table>
             </div>
         <?php endif; ?>
-        <Br>
+        <br>
 
         <h2>Sales</h2>
 
@@ -105,9 +108,9 @@
                         <?php foreach ($sales as $sale): ?>
                             <tr>
                                 <td><?= $sale['id'] ?></td>
-                                <td><?= $sale['created_at'] ?></td>
-                                <td><?= $sale['cashier_name'] ?></td>
-                                <td><?= ucfirst($sale['payment_method']) ?></td>
+                                <td><?= htmlspecialchars($sale['created_at']) ?></td>
+                                <td><?= htmlspecialchars($sale['cashier_name']) ?></td>
+                                <td><?= htmlspecialchars(ucfirst($sale['payment_method'])) ?></td>
                                 <td>Rs. <?= number_format($sale['total_amount'], 2) ?></td>
                                 <td><a href="receipt.php?id=<?= (int) $sale['id'] ?>">View</a></td>
                             </tr>

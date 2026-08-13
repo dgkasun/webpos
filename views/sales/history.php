@@ -1,3 +1,13 @@
+<?php
+
+/** @var array $sales */
+/** @var string $fromDate */
+/** @var string $toDate */
+/** @var int $saleId */
+/** @var int $page */
+/** @var int $totalPages */
+?>
+
 <?php include 'includes/header.php'; ?>
 
 <main class="wrap">
@@ -14,11 +24,11 @@
             <div class="form-grid">
                 <div class="form-group">
                     <label for="from_date">Date From</label>
-                    <input type="date" id="from_date" name="from_date" value="<?= $fromDate ?>">
+                    <input type="date" id="from_date" name="from_date" value="<?= htmlspecialchars($fromDate) ?>">
                 </div>
                 <div class="form-group">
                     <label for="to_date">Date To</label>
-                    <input type="date" id="to_date" name="to_date" value="<?= $toDate ?>">
+                    <input type="date" id="to_date" name="to_date" value="<?= htmlspecialchars($toDate) ?>">
                 </div>
                 <div class="form-group">
                     <label for="sale_id">Sale ID</label>
@@ -53,9 +63,9 @@
                         <?php foreach ($sales as $sale): ?>
                             <tr>
                                 <td><?= $sale['id'] ?></td>
-                                <td><?= $sale['created_at'] ?></td>
-                                <td><?= $sale['cashier_name'] ?></td>
-                                <td><?= ucfirst($sale['payment_method']) ?></td>
+                                <td><?= htmlspecialchars($sale['created_at']) ?></td>
+                                <td><?= htmlspecialchars($sale['cashier_name']) ?></td>
+                                <td><?= htmlspecialchars(ucfirst($sale['payment_method'])) ?></td>
                                 <td>Rs. <?= number_format($sale['total_amount'], 2) ?></td>
                                 <td><a href="receipt.php?id=<?= $sale['id'] ?>">View</a></td>
                             </tr>

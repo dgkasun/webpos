@@ -50,11 +50,13 @@ class SaleController
     {
         // Get sale and sale item data.
         $sale = $this->saleManager->find($saleId);
-        $saleItems = $this->saleManager->getItems($saleId);
 
         if (!$sale) {
             exit('Sale not found.');
         }
+
+        // Get items to the sale.
+        $saleItems = $this->saleManager->getItems($saleId);
 
         $pageTitle = 'Receipt';
         $currentPage = 'Sales History';
