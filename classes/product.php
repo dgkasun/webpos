@@ -201,7 +201,7 @@ class Product
                 ON categories.id = products.category_id';
 
         if ($search !== '') {
-            $sql .= 'WHERE products.name LIKE :search
+            $sql .= ' WHERE products.name LIKE :search
                     OR products.barcode LIKE :search
                     OR categories.name LIKE :search';
         }

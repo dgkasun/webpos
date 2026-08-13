@@ -20,7 +20,7 @@ class ProductController
 
         $search = trim($_GET['search'] ?? '');
 
-        $page = $_GET['page'] ?? 1;
+        $page = (int) ($_GET['page'] ?? 1);
 
         if ($page < 1) {
             $page = 1;

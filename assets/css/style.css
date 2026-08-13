@@ -365,3 +365,22 @@ input[type=checkbox] {
 .product-search-form #search {
     width: 250px;
 }
+
+/* product pagination */
+.pagination {
+    display: flex;
+    gap: 8px;
+    margin-top: 20px;
+    align-items: center;
+}
+
+.pagination a,
+.pagination span {
+    padding: 8px 12px;
+    border: 1px solid #ccc;
+    text-decoration: none;
+}
+
+.pagination .active {
+    background-color: #e6e6e6;
+}
