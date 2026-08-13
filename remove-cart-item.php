@@ -1,8 +1,9 @@
 <?php
 
-session_start();
+require_once __DIR__ . '/config/load.php';
+require_once __DIR__ . '/includes/auth.php';
 
-$productId = $_POST['remove_product'] ?? 0;
+$productId = (int) ($_POST['remove_product'] ?? 0);
 
 if ($productId > 0 && isset($_SESSION['cart'][$productId])) {
     unset($_SESSION['cart'][$productId]);

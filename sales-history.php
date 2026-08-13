@@ -1,15 +1,7 @@
 <?php
 
-session_start();
-
-if (!isset($_SESSION['user_id'])) {
-    header('Location: login.php');
-    exit;
-}
-
-require_once __DIR__ . '/config/database.php';
-require_once __DIR__ . '/classes/sale.php';
-require_once __DIR__ . '/controllers/sale-controller.php';
+require_once __DIR__ . '/config/load.php';
+require_once __DIR__ . '/includes/auth.php';
 
 $saleManager = new Sale($conn);
 $saleController = new SaleController($saleManager);
