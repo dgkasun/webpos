@@ -1,10 +1,12 @@
 <?php
 
+/** @var string $error */
 /** @var array $products */
 /** @var float $cartTotal */
+/** @var array $cartItems */
 ?>
 
-<?php include 'includes/header.php'; ?>
+<?php include __DIR__ . '/../../includes/header.php'; ?>
 
 <main class="wrap">
     <div class="container">
@@ -16,7 +18,7 @@
 
         <?php if ($error !== ''): ?>
             <p class="error">
-                <?= $error ?>
+                <?= htmlspecialchars($error) ?>
             </p>
         <?php endif; ?>
 
@@ -59,7 +61,7 @@
                             <?php foreach ($cartItems as $item): ?>
                                 <?php $subtotal = $item['price'] * $item['quantity']; ?>
                                 <tr>
-                                    <td><?= $item['name'] ?></td>
+                                    <td><?= htmlspecialchars($item['name']) ?></td>
                                     <td>Rs. <?= number_format($item['price'], 2) ?></td>
                                     <td><input type="number" name="quantities[<?= $item['id'] ?>]" value="<?= $item['quantity'] ?>" min="1" max="<?= $item['stock_quantity'] ?>"></td>
                                     <td>Rs. <?= number_format($subtotal, 2) ?></td>
@@ -153,4 +155,4 @@
     }
 </script>
 
-<?php include 'includes/footer.php'; ?>
+<?php include __DIR__ . '/../../includes/footer.php'; ?>

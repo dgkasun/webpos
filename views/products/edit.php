@@ -1,15 +1,16 @@
 <?php
 
+/** @var string $error */
 /** @var array $product */
 /** @var array $categories */
 /** @var string $message */
 ?>
 
-<?php include 'includes/header.php'; ?>
+<?php include __DIR__ . '/../../includes/header.php'; ?>
 
 <main class="wrap">
 
-    <?php include 'includes/menu.php'; ?>
+    <?php include __DIR__ . '/../../includes/menu.php'; ?>
     <div class="container">
         <div class="page-header">
             <div>
@@ -20,20 +21,20 @@
 
         <?php if ($message !== ''): ?>
             <p class="success">
-                <?= $message ?>
+                <?= htmlspecialchars($message) ?>
             </p>
         <?php endif; ?>
 
         <?php if ($error !== ''): ?>
             <p class="error">
-                <?= $error ?>
+                <?= htmlspecialchars($error) ?>
             </p>
         <?php endif; ?>
 
         <form method="post">
             <div class="form-group">
                 <label for="name">Product Name</label>
-                <input type="text" id="name" name="name" maxlength="150" value="<?= $product['name'] ?>" required>
+                <input type="text" id="name" name="name" maxlength="150" value="<?= htmlspecialchars($product['name']) ?>" required>
             </div>
 
             <div class="form-group">
@@ -42,7 +43,7 @@
                     <option value="">Select a category</option>
                     <?php foreach ($categories as $category): ?>
                         <option value="<?= $category['id'] ?>" <?= $product['category_id'] === $category['id'] ? 'selected' : '' ?>>
-                            <?= $category['name'] ?>
+                            <?= htmlspecialchars($category['name']) ?>
                         </option>
                     <?php endforeach; ?>
                 </select>
@@ -74,4 +75,4 @@
     </div>
 </main>
 
-<?php include 'includes/footer.php'; ?>
+<?php include __DIR__ . '/../../includes/footer.php'; ?>

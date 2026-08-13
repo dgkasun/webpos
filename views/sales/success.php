@@ -1,9 +1,12 @@
 <?php
 
 /** @var array $sale */
+/** @var array $saleItems */
+/** @var int $numberOfItems */
+/** @var int $totalQuantity */
 ?>
 
-<?php include 'includes/header.php'; ?>
+<?php include __DIR__ . '/../../includes/header.php'; ?>
 
 <main class="wrap">
     <div class="container">
@@ -18,8 +21,8 @@
                 </tr>
                 <tr>
                     <td>
-                        Invoice No: <?= $sale['id'] ?><Br>
-                        Date & Time: <?= $sale['created_at'] ?>
+                        Invoice No: <?= $sale['id'] ?><br>
+                        Date & Time: <?= htmlspecialchars($sale['created_at']) ?>
                     </td>
                 </tr>
                 <tr>
@@ -41,7 +44,7 @@
                         <?php
                         foreach ($saleItems as $item): ?>
                             <tr>
-                                <td><?= $item['product_name'] ?></td>
+                                <td><?= htmlspecialchars($item['product_name']) ?></td>
                                 <td><?= $item['quantity'] ?></td>
                                 <td><?= number_format($item['unit_price'], 2) ?></td>
                                 <td><?= number_format($item['subtotal'], 2) ?></td>
@@ -67,7 +70,7 @@
                             </tr>
                         <?php else: ?>
                             <tr>
-                                <th colspan="3"><?= ucfirst($sale['payment_method']) ?></th>
+                                <th colspan="3"><?= htmlspecialchars(ucfirst($sale['payment_method'])) ?></th>
                                 <th><?= number_format($sale['total_amount'], 2) ?></th>
                             </tr>
                         <?php endif; ?>
@@ -99,4 +102,4 @@
     </div>
 </main>
 
-<?php include 'includes/footer.php'; ?>
+<?php include __DIR__ . '/../../includes/footer.php'; ?>

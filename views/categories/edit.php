@@ -4,11 +4,11 @@
 /** @var string $message */
 /** @var string $error */
 
-include 'includes/header.php'; ?>
+include __DIR__ . '/../../includes/header.php'; ?>
 
 <main class="wrap">
 
-    <?php include 'includes/menu.php'; ?>
+    <?php include __DIR__ . '/../../includes/menu.php'; ?>
     <div class="container">
         <div class="page-header">
             <div>
@@ -52,4 +52,4 @@ include 'includes/header.php'; ?>
 </main>
 
 
-<?php include 'includes/footer.php'; ?>
+<?php include __DIR__ . '/../../includes/footer.php'; ?>

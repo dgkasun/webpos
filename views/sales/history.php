@@ -8,11 +8,11 @@
 /** @var int $totalPages */
 ?>
 
-<?php include 'includes/header.php'; ?>
+<?php include __DIR__ . '/../../includes/header.php'; ?>
 
 <main class="wrap">
 
-    <?php include 'includes/menu.php'; ?>
+    <?php include __DIR__ . '/../../includes/menu.php'; ?>
     <div class="container">
         <div class="page-header">
             <div>
@@ -104,4 +104,4 @@
     </div>
 </main>
 
-<?php include 'includes/footer.php'; ?>
+<?php include __DIR__ . '/../../includes/footer.php'; ?>
