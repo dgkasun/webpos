@@ -14,9 +14,7 @@
         <div class="receipt-actions">
             <a href="sales-history.php">Back to Sales History</a>
 
-            <button type="button" onclick="window.print()">
-                Print Receipt
-            </button>
+            <button type="button" onclick="window.location.href='sale-success.php?id=<?= $sale['id'] ?>'">Print Receipt</button>
         </div>
 
         <div class="receipt-header">

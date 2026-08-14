@@ -91,4 +91,20 @@ class Cart
     {
         return empty($_SESSION['cart']);
     }
+
+    public function getItemCount()
+    {
+        return count($_SESSION['cart'] ?? []);
+    }
+
+    public function getTotalQuantity()
+    {
+        $totalQuantity = 0;
+
+        foreach ($_SESSION['cart'] ?? [] as $item) {
+            $totalQuantity += $item['quantity'];
+        }
+
+        return $totalQuantity;
+    }
 }

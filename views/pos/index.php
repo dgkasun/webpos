@@ -9,12 +9,10 @@
 <?php include __DIR__ . '/../../includes/header.php'; ?>
 
 <main class="wrap">
+
+    <?php include __DIR__ . '/../../includes/pos-menu.php'; ?>
+
     <div class="container">
-        <div class="page-header">
-            <div>
-                <h1>POS</h1>
-            </div>
-        </div>
 
         <?php if ($error !== ''): ?>
             <p class="error">
@@ -86,7 +84,7 @@
                     <input type="hidden" name="action" value="clear">
                     <button type="submit">Clear Cart</button>
                 </form>
-                <a class="button-link" href="checkout.php">Payment</a>
+                <a class="button-link xl-btn" href="checkout.php">Payment</a>
             </div>
         <?php endif; ?>
     </div>

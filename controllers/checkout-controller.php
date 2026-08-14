@@ -28,6 +28,8 @@ class CheckoutController
 
         $cartItems = $this->cart->getItems();
         $cartTotal = $this->cart->getTotal();
+        $totalItems = $this->cart->getItemCount();
+        $totalQuantity = $this->cart->getTotalQuantity();
 
         // Process the payment request.
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {

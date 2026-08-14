@@ -9,7 +9,13 @@
 <?php include __DIR__ . '/../../includes/header.php'; ?>
 
 <main class="wrap">
+    <?php include __DIR__ . '/../../includes/pos-menu.php'; ?>
     <div class="container">
+
+        <div class="success-btns">
+            <a class="button-link xl-btn" href="pos.php">New Sale</a>
+            <button onclick="window.print();" class="xl-btn">Print</button>
+        </div>
         <div class="receipt-print">
             <table>
                 <tr>
@@ -94,10 +100,6 @@
                 </tr>
             </table>
         </div>
-
-        <br>
-        <a class="button" href="pos.php">New Sale</a>
-        <button onclick="window.print();">Print Receipt</button>
 
     </div>
 </main>

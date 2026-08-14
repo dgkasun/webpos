@@ -322,6 +322,16 @@ input[type=checkbox] {
     padding-bottom: 8px;
 }
 
+.receipt-print {
+    width: 80mm;
+    font-size: 13px;
+    margin: 30px auto 0 auto;
+}
+
+.success-btns {
+    text-align: center;
+}
+
 @media print {
 
     @page {
@@ -383,4 +393,105 @@ input[type=checkbox] {
 
 .pagination .active {
     background-color: #e6e6e6;
+}
+
+/* POS */
+.pos-menu {
+    border-bottom: 1px solid #ccc;
+}
+.pos-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.pos-header h1 {
+    margin-bottom: 0;
+}
+
+.pos-menu .container {
+    padding: 20px 20px 10px 20px;
+}
+
+/* checkout */
+.payment-options {
+    display: flex;
+    gap: 15px;
+}
+
+.payment-option {
+    flex: 1;
+    cursor: pointer;
+}
+
+.payment-option input {
+    display: none;
+}
+
+.payment-option span {
+    display: block;
+    padding: 18px 25px;
+    border: 2px solid #ddd;
+    border-radius: 6px;
+    text-align: center;
+    font-weight: 600;
+}
+
+.payment-option input:checked + span {
+    border-color: #222;
+    background: #222;
+    color: #fff;
+}
+
+.number-pad {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+    margin-top: 10px;
+    max-width: 300px;
+}
+
+.number-pad button {
+    padding: 15px;
+    font-size: 18px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.checkout-page {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 30px;
+    align-items: start;
+}
+
+.checkout-page .table-wrapper {
+    margin-bottom: 0;
+}
+
+.checkout-form {
+    padding: 20px;
+    background: #f5f6f7;
+    border-radius: 6px;
+}
+
+.xl-btn {
+    padding: 20px 25px;
+    font-size: 16px;
+    font-weight: 600;
+    background: #000;
+    color: #fff;
+}
+
+.back-link {
+    margin-bottom: 20px;
+}
+
+.checkout-summary {
+    font-weight: 400;
+}
+
+@media (max-width: 767px) {
+    .checkout-page {
+        grid-template-columns: 1fr;
+    }
 }
