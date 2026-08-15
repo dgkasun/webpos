@@ -46,24 +46,6 @@ class SaleController
         require __DIR__ . '/../views/sales/history.php';
     }
 
-    public function receipt(int $saleId): void
-    {
-        // Get sale and sale item data.
-        $sale = $this->saleManager->find($saleId);
-
-        if (!$sale) {
-            exit('Sale not found.');
-        }
-
-        // Get items belonging to the sale.
-        $saleItems = $this->saleManager->getItems($saleId);
-
-        $pageTitle = 'Receipt';
-        $currentPage = 'Sales History';
-
-        // Load the receipt view.
-        require __DIR__ . '/../views/sales/receipt.php';
-    }
 
     public function report(): void
     {
