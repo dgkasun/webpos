@@ -66,7 +66,15 @@
                     </div>
                     <div class="form-group">
                         <label for="stock_quantity">Opening Stock</label>
-                        <input type="number" id="stock_quantity" name="stock_quantity" min="0" value="0" required>
+                        <input type="number" id="stock_quantity" name="stock_quantity" min="0" value="" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="sale_unit">Selling Unit</label>
+                        <select id="sale_unit" name="sale_unit" required>
+                            <option value="unit">Unit</option>
+                            <option value="metre">Metre</option>
+                            <option value="yard">Yard</option>
+                        </select>
                     </div>
                 </div>
                 <button type="submit">Add Product</button>
@@ -119,7 +127,13 @@
                                 <td><?= htmlspecialchars($product['category_name']) ?></td>
                                 <td>Rs. <?= number_format($product['cost_price'], 2) ?></td>
                                 <td>Rs. <?= number_format($product['selling_price'], 2) ?></td>
-                                <td><?= $product['stock_quantity'] ?></td>
+                                <td>
+                                    <?php if ($product['sale_unit'] === 'unit'): ?>
+                                        <?= number_format($product['stock_quantity'], 0) ?>
+                                    <?php else: ?>
+                                        <?= number_format($product['stock_quantity'], 2) ?>
+                                    <?php endif; ?>
+                                </td>
                                 <td><?= $product['is_active'] ? 'Active' : 'Inactive' ?></td>
                                 <td><a href="edit-product.php?id=<?= $product['id'] ?>">Edit</a></td>
                             </tr>

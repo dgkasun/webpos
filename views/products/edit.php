@@ -61,13 +61,22 @@
 
             <div class="form-group">
                 <label for="stock_quantity">Stock Quantity</label>
-                <input type="number" id="stock_quantity" name="stock_quantity" min="0" value="<?= $product['stock_quantity'] ?>" required>
+                <input type="number" id="stock_quantity" name="stock_quantity" min="0" step="<?= $product['sale_unit'] === 'unit' ? '1' : '0.01' ?>" value="<?= $product['sale_unit'] === 'unit' ? number_format($product['stock_quantity'], 0, '.', '') : number_format($product['stock_quantity'], 2, '.', '') ?>" required>
             </div>
 
             <div class="form-group">
                 <label for="is_active">
                     <input type="checkbox" id="is_active" name="is_active" value="1" <?= $product['is_active'] == 1 ? 'checked' : '' ?>> Active
                 </label>
+            </div>
+
+            <div class="form-group">
+                <label for="sale_unit">Selling Unit</label>
+                <select id="sale_unit" name="sale_unit" required>
+                    <option value="unit" <?= $product['sale_unit'] === 'unit' ? 'selected' : '' ?>> Unit</option>
+                    <option value="metre" <?= $product['sale_unit'] === 'metre' ? 'selected' : '' ?>>Metre</option>
+                    <option value="yard" <?= $product['sale_unit'] === 'yard' ? 'selected' : '' ?>>Yard</option>
+                </select>
             </div>
 
             <button type="submit">Update Product</button>

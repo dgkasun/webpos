@@ -14,7 +14,7 @@ class Cart
         }
     }
 
-    public function add(array $product, int $quantity)
+    public function add(array $product, float $quantity)
     {
         $productId = $product['id'];
 
@@ -32,6 +32,7 @@ class Cart
             'price' => $product['selling_price'],
             'quantity' => $newQuantity,
             'stock_quantity' => $product['stock_quantity'],
+            'sale_unit' => $product['sale_unit'],
         ];
 
         return '';
@@ -99,7 +100,7 @@ class Cart
 
     public function getTotalQuantity()
     {
-        $totalQuantity = 0;
+        $totalQuantity = 0.0;
 
         foreach ($_SESSION['cart'] ?? [] as $item) {
             $totalQuantity += $item['quantity'];

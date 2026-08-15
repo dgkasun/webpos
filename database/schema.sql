@@ -26,9 +26,10 @@ CREATE TABLE products (
     name VARCHAR(150) NOT NULL,
     cost_price DECIMAL(10,2) NOT NULL,
     selling_price DECIMAL(10,2) NOT NULL,
-    stock_quantity INT NOT NULL DEFAULT 0,
+    stock_quantity DECIMAL(10,2) NOT NULL DEFAULT 0.00,
     is_active TINYINT(1) NOT NULL DEFAULT 1,
     barcode VARCHAR(100) NULL UNIQUE,
+    sale_unit VARCHAR(20) NOT NULL DEFAULT 'unit',
     FOREIGN KEY (category_id)
         REFERENCES categories(id)
 );
@@ -53,7 +54,7 @@ CREATE TABLE sale_items (
     id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
     sale_id INT UNSIGNED NOT NULL,
     product_id INT UNSIGNED NOT NULL,
-    quantity INT UNSIGNED NOT NULL,
+    quantity DECIMAL(10,2) NOT NULL;
     unit_price DECIMAL(10,2) NOT NULL,
     subtotal DECIMAL(10,2) NOT NULL,
 

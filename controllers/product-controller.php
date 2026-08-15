@@ -37,30 +37,17 @@ class ProductController
             $costPrice = $_POST['cost_price'] ?? '';
             $sellingPrice = $_POST['selling_price'] ?? '';
             $stockQuantity = $_POST['stock_quantity'] ?? '';
+            $saleUnit = $_POST['sale_unit'] ?? 'unit';
 
-            if (
-                $name === '' ||
-                $categoryId <= 0 ||
-                $sellingPrice === '' ||
-                $costPrice === '' ||
-                $stockQuantity === ''
-            ) {
+            if ($name === '' || $categoryId <= 0 || $sellingPrice === '' || $costPrice === '' || $stockQuantity === '') {
                 $error = 'Please complete all required fields.';
-            } elseif (
-                !is_numeric($costPrice) ||
-                !is_numeric($sellingPrice) ||
-                !is_numeric($stockQuantity)
-            ) {
+            } elseif (!is_numeric($costPrice) || !is_numeric($sellingPrice) || !is_numeric($stockQuantity)) {
                 $error = 'Prices and stock values must be numeric.';
-            } elseif (
-                $costPrice < 0 ||
-                $sellingPrice < 0 ||
-                $stockQuantity < 0
-            ) {
+            } elseif ($costPrice < 0 || $sellingPrice < 0 || $stockQuantity < 0) {
                 $error = 'Prices and stock values cannot be negative.';
             } else {
                 try {
-                    $this->productManager->create($categoryId, $name, $costPrice, $sellingPrice, $stockQuantity);
+                    $this->productManager->create($categoryId, $name, $costPrice, $sellingPrice, $stockQuantity, $saleUnit);
 
                     $message = 'Product added successfully.';
                 } catch (PDOException $e) {
@@ -111,30 +98,17 @@ class ProductController
             $sellingPrice = $_POST['selling_price'] ?? '';
             $stockQuantity = $_POST['stock_quantity'] ?? '';
             $isActive = isset($_POST['is_active']) ? 1 : 0;
+            $saleUnit = $_POST['sale_unit'] ?? 'unit';
 
-            if (
-                $name === '' ||
-                $categoryId <= 0 ||
-                $costPrice === '' ||
-                $sellingPrice === '' ||
-                $stockQuantity === ''
-            ) {
+            if ($name === '' || $categoryId <= 0 || $costPrice === '' || $sellingPrice === '' || $stockQuantity === '') {
                 $error = 'Please complete all fields.';
-            } elseif (
-                !is_numeric($costPrice) ||
-                !is_numeric($sellingPrice) ||
-                !is_numeric($stockQuantity)
-            ) {
+            } elseif (!is_numeric($costPrice) || !is_numeric($sellingPrice) || !is_numeric($stockQuantity)) {
                 $error = 'Prices and stock must be numeric.';
-            } elseif (
-                $costPrice < 0 ||
-                $sellingPrice < 0 ||
-                $stockQuantity < 0
-            ) {
+            } elseif ($costPrice < 0 || $sellingPrice < 0 || $stockQuantity < 0) {
                 $error = 'Prices and stock cannot be negative.';
             } else {
                 try {
-                    $this->productManager->update($productId, $categoryId, $name, $costPrice, $sellingPrice, $stockQuantity, $isActive);
+                    $this->productManager->update($productId, $categoryId, $name, $costPrice, $sellingPrice, $stockQuantity, $saleUnit, $isActive);
                     $message = 'Product updated successfully.';
                     $product = $this->productManager->find($productId);
                 } catch (PDOException $e) {

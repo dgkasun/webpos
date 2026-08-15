@@ -57,11 +57,12 @@
                         </thead>
                         <tbody>
                             <?php foreach ($cartItems as $item): ?>
-                                <?php $subtotal = $item['price'] * $item['quantity']; ?>
+                                <?php $subtotal = $item['price'] * $item['quantity'];
+                                $quantityStep = $item['sale_unit'] === 'unit' ? '1' : '0.25'; ?>
                                 <tr>
                                     <td><?= htmlspecialchars($item['name']) ?></td>
                                     <td>Rs. <?= number_format($item['price'], 2) ?></td>
-                                    <td><input type="number" name="quantities[<?= $item['id'] ?>]" value="<?= $item['quantity'] ?>" min="1" max="<?= $item['stock_quantity'] ?>"></td>
+                                    <td><input type="number" name="quantities[<?= $item['id'] ?>]" value="<?= $item['quantity'] ?>" min="<?= $quantityStep ?>" step="<?= $quantityStep ?>" max="<?= $item['stock_quantity'] ?>"></td>
                                     <td>Rs. <?= number_format($subtotal, 2) ?></td>
                                     <td><button type="submit" name="remove_product" formaction="remove-cart-item.php" value="<?= $item['id'] ?>">Remove</button>
                                     </td>

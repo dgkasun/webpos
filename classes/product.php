@@ -26,11 +26,11 @@ class Product
         return $categoryQuery->fetchAll(PDO::FETCH_ASSOC);
     }
 
-    public function create(int $categoryId, string $name, float $costPrice, float $sellingPrice, int $stockQuantity): void
+    public function create(int $categoryId, string $name, float $costPrice, float $sellingPrice, float $stockQuantity, string $saleUnit): void
     {
         $productQuery = $this->conn->prepare(
-            'INSERT INTO products (category_id, name, cost_price, selling_price, stock_quantity) 
-             VALUES (:category_id, :name, :cost_price, :selling_price, :stock_quantity)'
+            'INSERT INTO products (category_id, name, cost_price, selling_price, stock_quantity, sale_unit) 
+             VALUES (:category_id, :name, :cost_price, :selling_price, :stock_quantity, :sale_unit)'
         );
         $productQuery->execute([
             'category_id' => $categoryId,
@@ -38,6 +38,7 @@ class Product
             'cost_price' => $costPrice,
             'selling_price' => $sellingPrice,
             'stock_quantity' => $stockQuantity,
+            'sale_unit' => $saleUnit,
         ]);
 
         // Generate the barcode using the new product ID.
@@ -58,7 +59,7 @@ class Product
     public function find(int $id): array|false
     {
         $productQuery = $this->conn->prepare(
-            'SELECT id, category_id, name, barcode, cost_price, selling_price, stock_quantity, is_active
+            'SELECT id, category_id, name, barcode, cost_price, selling_price, stock_quantity, sale_unit, is_active
              FROM products
              WHERE id = :id'
         );
@@ -68,7 +69,7 @@ class Product
         return $productQuery->fetch(PDO::FETCH_ASSOC);
     }
 
-    public function update(int $id, int $categoryId, string $name, float $costPrice, float $sellingPrice, int $stockQuantity, int $isActive): void
+    public function update(int $id, int $categoryId, string $name, float $costPrice, float $sellingPrice, float $stockQuantity, string $saleUnit, int $isActive): void
     {
         $productQuery = $this->conn->prepare(
             'UPDATE products
@@ -78,7 +79,8 @@ class Product
                 cost_price = :cost_price,
                 selling_price = :selling_price,
                 stock_quantity = :stock_quantity,
-                is_active = :is_active
+                is_active = :is_active,
+                sale_unit = :sale_unit
              WHERE id = :id'
         );
         $productQuery->execute([
@@ -89,6 +91,7 @@ class Product
             'stock_quantity' => $stockQuantity,
             'is_active' => $isActive,
             'id' => $id,
+            'sale_unit' => $saleUnit,
         ]);
     }
 
@@ -117,7 +120,7 @@ class Product
     public function getAvailableForSale()
     {
         $productQuery = $this->conn->query(
-            'SELECT id, name, selling_price, stock_quantity, barcode
+            'SELECT id, name, selling_price, stock_quantity, barcode, sale_unit
             FROM products
             WHERE is_active = 1 AND stock_quantity > 0
             ORDER BY name ASC'
@@ -128,7 +131,7 @@ class Product
     public function findAvailable(int $id)
     {
         $productQuery = $this->conn->prepare(
-            'SELECT id, name, selling_price, stock_quantity
+            'SELECT id, name, selling_price, stock_quantity, sale_unit
             FROM products
             WHERE id = :id AND is_active = 1'
         );
@@ -141,7 +144,7 @@ class Product
     public function getPaginated(string $search, int $limit, int $offset)
     {
 
-        $sql = 'SELECT products.id, products.name, products.barcode, products.cost_price, products.selling_price, products.stock_quantity, products.is_active, categories.name AS category_name
+        $sql = 'SELECT products.id, products.name, products.barcode, products.cost_price, products.selling_price, products.stock_quantity, products.sale_unit, products.is_active, categories.name AS category_name
                 FROM products
                 INNER JOIN categories ON categories.id = products.category_id';
 

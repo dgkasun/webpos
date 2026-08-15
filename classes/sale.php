@@ -33,7 +33,7 @@ class Sale
     public function getItems(int $saleId)
     {
         $saleItemsQuery = $this->conn->prepare(
-            'SELECT products.name AS product_name, sale_items.quantity, sale_items.unit_price, sale_items.subtotal
+            'SELECT products.name AS product_name, products.sale_unit, sale_items.quantity, sale_items.unit_price, sale_items.subtotal
              FROM sale_items
              INNER JOIN products
                 ON products.id = sale_items.product_id
