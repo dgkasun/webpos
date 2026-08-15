@@ -4,6 +4,9 @@
 /** @var array $saleItems */
 /** @var int $numberOfItems */
 /** @var int $totalQuantity */
+/** @var string $from */
+/** @var string $fromDate */
+/** @var string $toDate */
 ?>
 
 <?php include __DIR__ . '/../../includes/header.php'; ?>
@@ -11,6 +14,12 @@
 <main class="wrap">
     <?php include __DIR__ . '/../../includes/pos-menu.php'; ?>
     <div class="container">
+
+        <?php if ($from === 'history'): ?>
+            <a class="button" href="sales-history.php">Back to Sales History</a>
+        <?php elseif ($from === 'report'): ?>
+            <a class="button" href="sales-report.php">Back to Sales Report</a>
+        <?php endif; ?>
 
         <div class="success-btns">
             <a class="button-link xl-btn" href="pos.php">New Sale</a>

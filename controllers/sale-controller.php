@@ -116,6 +116,9 @@ class SaleController
             $totalQuantity += $item['quantity'];
         }
 
+        // Get the page the user came from.
+        $from = $_GET['from'] ?? '';
+
         $pageTitle = 'Sale Complete';
 
         // Load the sale success view.

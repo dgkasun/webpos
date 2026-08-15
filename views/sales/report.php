@@ -112,7 +112,7 @@
                                 <td><?= htmlspecialchars($sale['cashier_name']) ?></td>
                                 <td><?= htmlspecialchars(ucfirst($sale['payment_method'])) ?></td>
                                 <td>Rs. <?= number_format($sale['total_amount'], 2) ?></td>
-                                <td><a href="receipt.php?id=<?= (int) $sale['id'] ?>">View</a></td>
+                                <td><a href="sale-success.php?id=<?= $sale['id'] ?>&from=report">View</a></td>
                             </tr>
                         <?php endforeach; ?>
                     </tbody>
