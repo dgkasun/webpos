@@ -2,13 +2,14 @@
 
 /**
  * Handles checkout requests.
+ * 
+ * Ref: Fowler, M. (2003) - https://sar.ac.id/stmik_ebook/prog_file_file/EFCofwzsj0.pdf
  */
 class CheckoutController
 {
     private Cart $cart;
     private Sale $saleManager;
 
-    // Receive the Cart and Sale model.
     public function __construct(
         Cart $cart,
         Sale $saleManager
@@ -19,6 +20,7 @@ class CheckoutController
 
     public function index(): void
     {
+        // Redirect if the cart is empty
         if ($this->cart->isEmpty()) {
             header('Location: pos.php');
             exit;
@@ -26,12 +28,13 @@ class CheckoutController
 
         $error = '';
 
+        // Get cart data
         $cartItems = $this->cart->getItems();
         $cartTotal = $this->cart->getTotal();
         $totalItems = $this->cart->getItemCount();
         $totalQuantity = $this->cart->getTotalQuantity();
 
-        // Process the payment request.
+        // Process the payment request
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $paymentMethod = $_POST['payment_method'] ?? 'cash';
             $cashReceived = $_POST['cash_received'] ?? '';
@@ -51,14 +54,14 @@ class CheckoutController
                 $cashReceivedAmount = null;
                 $changeAmount = null;
 
-                // Calculate change for cash payments.
+                // Calculate change for cash payments
                 if ($paymentMethod === 'cash') {
                     $cashReceivedAmount = $cashReceived;
                     $changeAmount = $cashReceivedAmount - $cartTotal;
                 }
 
                 try {
-                    // Create the sale and update stock.
+                    // Create the sale and update stock
                     $saleId = $this->saleManager->create(
                         $_SESSION['user_id'],
                         $cartItems,
@@ -67,7 +70,10 @@ class CheckoutController
                         $cashReceivedAmount,
                         $changeAmount
                     );
+
+                    // Clear the cart after a successful sale
                     $this->cart->clear();
+
                     header('Location: sale-success.php?id=' . $saleId);
                     exit;
                 } catch (Exception $e) {
@@ -78,7 +84,7 @@ class CheckoutController
 
         $pageTitle = 'Checkout';
 
-        // Load the checkout view.
+        // Load the checkout view
         require __DIR__ . '/../views/checkout/index.php';
     }
 }

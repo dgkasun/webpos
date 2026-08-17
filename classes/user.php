@@ -1,9 +1,10 @@
 <?php
 
 /**
- * Handles user-related database operations.
- * The database connection is provided through constructor injection,
- * Ref: Fowler, M. (2004) - https://martinfowler.com/articles/injection.html
+ * Handles user data and database operations.
+ * The database connection is passed through the constructor.
+ * 
+ * Ref: Fowler, M. (2004)
  */
 class User
 {
@@ -14,6 +15,7 @@ class User
         $this->conn = $conn;
     }
 
+    // Find an active user by username
     public function findActiveByUsername(string $username)
     {
         $userQuery = $this->conn->prepare(

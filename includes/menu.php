@@ -1,7 +1,12 @@
 <?php
 
+/**
+ * Displays the shared admin navigation menu.
+ */
+
 /** @var string $currentPage **/
 
+// Set an empty value if the current page is not defined.
 $currentPage = $currentPage ?? '';
 ?>
 

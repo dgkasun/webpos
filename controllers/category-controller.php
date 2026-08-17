@@ -2,14 +2,14 @@
 
 /**
  * Handles category requests between the model and views.
- * Ref: Fowler, M. (2002) Patterns of Enterprise Application Architecture - https://sar.ac.id/stmik_ebook/prog_file_file/EFCofwzsj0.pdf
+ * 
+ * Ref: Fowler, M. (2003) - https://sar.ac.id/stmik_ebook/prog_file_file/EFCofwzsj0.pdf
  */
 
 class CategoryController
 {
     private Category $categoryManager;
 
-    // Receive the Category model.
     public function __construct(Category $categoryManager)
     {
         $this->categoryManager = $categoryManager;
@@ -20,7 +20,7 @@ class CategoryController
         $message = '';
         $error = '';
 
-        // Process the add category request.
+        // Process the add category request
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $name = trim($_POST['name'] ?? '');
             $description = trim($_POST['description'] ?? '');
@@ -32,6 +32,7 @@ class CategoryController
                     $this->categoryManager->create($name, $description);
                     $message = 'Category added successfully.';
                 } catch (PDOException $e) {
+                    // Check for a duplicate category
                     if ($e->getCode() === '23000') {
                         $error = 'This category already exists.';
                     } else {
@@ -41,13 +42,13 @@ class CategoryController
             }
         }
 
-        // Get category data.
+        // Get all categories
         $categories = $this->categoryManager->getAll();
 
         $pageTitle = 'Categories';
         $currentPage = 'Categories';
 
-        // Load the view.
+        // Load the view
         require __DIR__ . '/../views/categories/index.php';
     }
 
@@ -56,14 +57,14 @@ class CategoryController
         $message = '';
         $error = '';
 
-        // Get the selected category.
+        // Get the selected category
         $category = $this->categoryManager->find($categoryId);
 
         if (!$category) {
             exit('Category not found.');
         }
 
-        // Process the update category request.
+        // Process the update category request
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $name = trim($_POST['name'] ?? '');
             $description = trim($_POST['description'] ?? '');
@@ -75,8 +76,11 @@ class CategoryController
                 try {
                     $this->categoryManager->update($categoryId, $name, $description, $isActive);
                     $message = 'Category updated successfully.';
+
+                    // Get the updated category
                     $category = $this->categoryManager->find($categoryId);
                 } catch (PDOException $e) {
+                    // Check for a duplicate category
                     if ($e->getCode() === '23000') {
                         $error = 'This category already exists.';
                     } else {
@@ -89,7 +93,7 @@ class CategoryController
         $pageTitle = 'Edit Category';
         $currentPage = 'Categories';
 
-        // Load the edit view.
+        // Load the edit view
         require __DIR__ . '/../views/categories/edit.php';
     }
 }

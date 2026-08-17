@@ -1,3 +1,4 @@
+<!-- Displays the POS nav menu. -->
 <div class="pos-menu">
     <div class="container">
         <div class="pos-header">

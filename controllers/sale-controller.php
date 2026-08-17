@@ -1,13 +1,15 @@
 <?php
 
 /**
- * Handles sale and report requests.
+ * Handles sale and report requests between the model and views.
+ * 
+ * Ref: Fowler, M. (2003) - https://sar.ac.id/stmik_ebook/prog_file_file/EFCofwzsj0.pdf
  */
+
 class SaleController
 {
     private Sale $saleManager;
 
-    // Receive the Sale model.
     public function __construct(Sale $saleManager)
     {
         $this->saleManager = $saleManager;
@@ -15,6 +17,7 @@ class SaleController
 
     public function history(): void
     {
+        // Get filter and pagination values
         $fromDate = trim($_GET['from_date'] ?? '');
         $toDate = trim($_GET['to_date'] ?? '');
         $saleId = (int) ($_GET['sale_id'] ?? 0);
@@ -26,8 +29,8 @@ class SaleController
 
         $perPage = 10;
 
+        // Calculate pagination
         $totalSales = $this->saleManager->getFilteredCount($fromDate, $toDate, $saleId);
-
         $totalPages = max(1, ceil($totalSales / $perPage));
 
         if ($page > $totalPages) {
@@ -36,19 +39,20 @@ class SaleController
 
         $offset = ($page - 1) * $perPage;
 
-        // Get sales for the current page.
+        // Get sales for the current page
         $sales = $this->saleManager->getFiltered($fromDate, $toDate, $saleId, $perPage, $offset);
 
         $pageTitle = 'Sales History';
         $currentPage = 'Sales History';
 
-        // Load the view.
+        // Load the view
         require __DIR__ . '/../views/sales/history.php';
     }
 
 
     public function report(): void
     {
+        // Get the selected date range
         $fromDate = $_GET['from_date'] ?? date('Y-m-01');
         $toDate = $_GET['to_date'] ?? date('Y-m-d');
 
@@ -64,46 +68,48 @@ class SaleController
         if ($fromDate > $toDate) {
             $error = 'From date cannot be later than To date.';
         } else {
-            // Get sales and summary data for the selected date range.
+            // Get sales and summary data
             $sales = $this->saleManager->getByDateRange($fromDate, $toDate);
             $summary = $this->saleManager->getReportSummary($fromDate, $toDate);
 
-            // Get the five best-selling products.
+            // Get the five best-selling products
             $bestSellingProducts = $this->saleManager->getBestSellingProducts($fromDate, $toDate);
         }
 
         $pageTitle = 'Sales Report';
         $currentPage = 'Reports';
 
-        // Load the report view.
+        // Load the view
         require __DIR__ . '/../views/sales/report.php';
     }
 
 
     public function success(int $saleId): void
     {
-        // Get completed sale data.
+        // Get the completed sale
         $sale = $this->saleManager->find($saleId);
 
         if (!$sale) {
             exit('Sale not found.');
         }
 
+        // Get the items in the sale
         $saleItems = $this->saleManager->getItems($saleId);
 
         $numberOfItems = count($saleItems);
         $totalQuantity = 0;
 
+        // Calculate the total quantity sold
         foreach ($saleItems as $item) {
             $totalQuantity += $item['quantity'];
         }
 
-        // Get the page the user came from.
+        // Get the previous page
         $from = $_GET['from'] ?? '';
 
         $pageTitle = 'Sale Complete';
 
-        // Load the sale success view.
+        // Load the view
         require __DIR__ . '/../views/sales/success.php';
     }
 }

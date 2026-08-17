@@ -1,9 +1,11 @@
 <?php
 
 /**
- * Handles sale-related database operations.
- * The database connection is provided through constructor injection,
- * Ref: Fowler, M. (2004) - https://martinfowler.com/articles/injection.html
+ * Handles sale data and database operations.
+ * The database connection is passed through the constructor.
+ * 
+ * Ref: Fowler, M. (2004)
+ * Ref: PHP PDO Transactions - https://www.php.net/manual/en/pdo.transactions.php
  */
 
 class Sale
@@ -15,6 +17,7 @@ class Sale
         $this->conn = $conn;
     }
 
+    // Find a sale by ID
     public function find(int $id): array|false
     {
         $saleQuery = $this->conn->prepare(
@@ -30,6 +33,7 @@ class Sale
         return $saleQuery->fetch(PDO::FETCH_ASSOC);
     }
 
+    // Get items for a sale
     public function getItems(int $saleId)
     {
         $saleItemsQuery = $this->conn->prepare(
@@ -46,6 +50,7 @@ class Sale
         return $saleItemsQuery->fetchAll(PDO::FETCH_ASSOC);
     }
 
+    // Get today's sales summary
     public function getTodaySummary()
     {
         $saleQuery = $this->conn->query(
@@ -56,13 +61,14 @@ class Sale
         return $saleQuery->fetch(PDO::FETCH_ASSOC);
     }
 
-    /* checkout */
+    // Create a sale and update product stock
     public function create(int $userId, array $items, float $totalAmount, string $paymentMethod, ?float $cashReceived, ?float $changeAmount)
     {
         try {
+            // Start the transaction
             $this->conn->beginTransaction();
 
-            // Create sale record.
+            // Create sale record
             $saleQuery = $this->conn->prepare(
                 'INSERT INTO sales (user_id, total_amount, payment_method, cash_received, change_amount
                 ) VALUES (:user_id, :total_amount, :payment_method, :cash_received, :change_amount)'
@@ -78,6 +84,7 @@ class Sale
 
             $saleId = $this->conn->lastInsertId();
 
+            // Lock the product while checking stock
             $productQuery = $this->conn->prepare(
                 'SELECT stock_quantity
                 FROM products
@@ -107,8 +114,9 @@ class Sale
                     'product_id' => $productId,
                 ]);
 
-                // Check the stock before completing.
+                // Check available stock
                 $product = $productQuery->fetch(PDO::FETCH_ASSOC);
+
                 if (!$product) {
                     throw new Exception('Product not found.');
                 }
@@ -116,7 +124,7 @@ class Sale
                     throw new Exception('Not enough stock available.');
                 }
 
-                // Save.
+                // Save the sale item
                 $saleItemQuery->execute([
                     'sale_id' => $saleId,
                     'product_id' => $productId,
@@ -125,17 +133,19 @@ class Sale
                     'subtotal' => $subtotal,
                 ]);
 
-                // Reduce stock.
+                // Reduce product stock
                 $stockQuery->execute([
                     'quantity' => $quantity,
                     'product_id' => $productId,
                 ]);
             }
 
+            // Complete the transaction
             $this->conn->commit();
 
             return $saleId;
         } catch (Exception $e) {
+            // Roll back if the sale fails
             if ($this->conn->inTransaction()) {
                 $this->conn->rollBack();
             }
@@ -143,7 +153,7 @@ class Sale
         }
     }
 
-    /* sale report */
+    // Get sales within a date range
     public function getByDateRange(string $fromDate, string $toDate)
     {
         $salesQuery = $this->conn->prepare(
@@ -160,6 +170,7 @@ class Sale
         return $salesQuery->fetchAll(PDO::FETCH_ASSOC);
     }
 
+    // Get sales summary for a date range
     public function getReportSummary(string $fromDate, string $toDate)
     {
         $salesQuery = $this->conn->prepare(
@@ -194,7 +205,7 @@ class Sale
         return $summary;
     }
 
-    /* sales filter */
+    // Get filtered sales
     public function getFiltered(string $fromDate, string $toDate, int $saleId, int $limit, int $offset)
     {
         $sql =
@@ -230,6 +241,7 @@ class Sale
         return $salesQuery->fetchAll(PDO::FETCH_ASSOC);
     }
 
+    // Get the number of filtered sales
     public function getFilteredCount(string $fromDate, string $toDate, int $saleId)
     {
         $sql = 'SELECT COUNT(*) 
@@ -259,7 +271,7 @@ class Sale
         return $salesQuery->fetchColumn();
     }
 
-    /* report */
+    // Get the top five best selling products
     public function getBestSellingProducts(string $fromDate, string $toDate)
     {
         $productQuery = $this->conn->prepare(

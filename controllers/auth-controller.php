@@ -2,12 +2,14 @@
 
 /**
  * Handles user authentication.
+ * 
+ * Ref: PHP password_verify() - https://www.php.net/manual/en/function.password-verify.php
  */
+
 class AuthController
 {
     private User $userManager;
 
-    // Receive the User model.
     public function __construct(User $userManager)
     {
         $this->userManager = $userManager;
@@ -17,7 +19,7 @@ class AuthController
     {
         $error = '';
 
-        // Process the login request.
+        // Process the login request
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $username = trim($_POST['username'] ?? '');
             $password = $_POST['password'] ?? '';
@@ -25,9 +27,11 @@ class AuthController
             if ($username === '' || $password === '') {
                 $error = 'Please enter your username and password.';
             } else {
+                // Find the user and verify the password
                 $user = $this->userManager->findActiveByUsername($username);
 
                 if ($user && password_verify($password, $user['password'])) {
+                    // Store user data in the session
                     $_SESSION['user_id'] = $user['id'];
                     $_SESSION['user_name'] = $user['name'];
                     $_SESSION['user_role'] = $user['role'];
@@ -42,7 +46,7 @@ class AuthController
 
         $pageTitle = 'Login';
 
-        // Load the login view.
+        // Load the login view
         require __DIR__ . '/../views/auth/login.php';
     }
 }

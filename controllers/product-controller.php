@@ -2,12 +2,13 @@
 
 /**
  * Handles product requests between the model and views.
+ * 
+ * Ref: Fowler, M. (2003) - https://sar.ac.id/stmik_ebook/prog_file_file/EFCofwzsj0.pdf
  */
 class ProductController
 {
     private Product $productManager;
 
-    // Receive the Product model.
     public function __construct(Product $productManager)
     {
         $this->productManager = $productManager;
@@ -18,8 +19,8 @@ class ProductController
         $message = '';
         $error = '';
 
+        // Get search and pagination values
         $search = trim($_GET['search'] ?? '');
-
         $page = (int) ($_GET['page'] ?? 1);
 
         if ($page < 1) {
@@ -28,9 +29,10 @@ class ProductController
 
         $perPage = 10;
 
+        // Get active categories
         $categories = $this->productManager->getActiveCategories();
 
-        // Process the add product request.
+        // Process the add product request
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $name = trim($_POST['name'] ?? '');
             $categoryId = $_POST['category_id'] ?? 0;
@@ -51,6 +53,7 @@ class ProductController
 
                     $message = 'Product added successfully.';
                 } catch (PDOException $e) {
+                    // Check for a duplicate product
                     if ($e->getCode() === '23000') {
                         $error = 'This product already exists.';
                     } else {
@@ -60,19 +63,23 @@ class ProductController
             }
         }
 
+        // Calculate pagination
         $totalProducts = $this->productManager->getFilteredCount($search);
         $totalPages = max(1, ceil($totalProducts / $perPage));
+
         if ($page > $totalPages) {
             $page = $totalPages;
         }
+
         $offset = ($page - 1) * $perPage;
-        // Get products for the current page.
+
+        // Get products for the current page
         $products = $this->productManager->getPaginated($search, $perPage, $offset);
 
         $pageTitle = 'Products';
         $currentPage = 'Products';
 
-        // Load the view.
+        // Load the view
         require __DIR__ . '/../views/products/index.php';
     }
 
@@ -82,7 +89,7 @@ class ProductController
         $message = '';
         $error = '';
 
-        // Get product and category data.
+        // Get product and category data
         $categories = $this->productManager->getActiveCategories();
         $product = $this->productManager->find($productId);
 
@@ -90,7 +97,7 @@ class ProductController
             exit('Product not found.');
         }
 
-        // Process the update product request.
+        // Process the update product request
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $name = trim($_POST['name'] ?? '');
             $categoryId = $_POST['category_id'] ?? 0;
@@ -109,9 +116,13 @@ class ProductController
             } else {
                 try {
                     $this->productManager->update($productId, $categoryId, $name, $costPrice, $sellingPrice, $stockQuantity, $saleUnit, $isActive);
+
                     $message = 'Product updated successfully.';
+
+                    // Get the updated product
                     $product = $this->productManager->find($productId);
                 } catch (PDOException $e) {
+                    // Check for a duplicate product
                     if ($e->getCode() === '23000') {
                         $error = 'This product already exists.';
                     } else {
@@ -124,7 +135,7 @@ class ProductController
         $pageTitle = 'Edit Product';
         $currentPage = 'Products';
 
-        // Load the edit view.
+        // Load the edit view
         require __DIR__ . '/../views/products/edit.php';
     }
 }

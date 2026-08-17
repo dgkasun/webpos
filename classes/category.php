@@ -1,9 +1,10 @@
 <?php
 
 /**
- * Category model for category data.
- * Uses constructor injection for the database connection.
- * Ref: Fowler, M. (2004) - https://martinfowler.com/articles/injection.html
+ * Handles category data and database operations.
+ * The database connection is passed through the constructor.
+ * 
+ * Ref: Fowler, M. (2004)
  */
 
 class Category
@@ -15,6 +16,7 @@ class Category
         $this->conn = $conn;
     }
 
+    // Get all categories
     public function getAll(): array
     {
         $categoryQuery = $this->conn->query(
@@ -25,6 +27,7 @@ class Category
         return $categoryQuery->fetchAll(PDO::FETCH_ASSOC);
     }
 
+    // Create a new category
     public function create(string $name, string $description): void
     {
         $categoryQuery = $this->conn->prepare(
@@ -36,6 +39,7 @@ class Category
         ]);
     }
 
+    // Find a category by ID
     public function find(int $id): array|false
     {
         $categoryQuery = $this->conn->prepare(
@@ -51,6 +55,7 @@ class Category
         return $categoryQuery->fetch(PDO::FETCH_ASSOC);
     }
 
+    // Update a category
     public function update(int $id, string $name, string $description, int $isActive): void
     {
         $categoryQuery = $this->conn->prepare(
@@ -70,6 +75,7 @@ class Category
         ]);
     }
 
+    // Get the total number of categories
     public function getCount(): int
     {
         $categoryQuery = $this->conn->query(

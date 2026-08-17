@@ -1,9 +1,10 @@
 <?php
 
 /**
- * Handles product related database operations.
- * The database connection is provided through constructor injection,
- * Ref: Fowler, M. (2004) - https://martinfowler.com/articles/injection.html
+ * Handles product data and database operations.
+ * The database connection is passed through the constructor.
+ * 
+ * Ref: Fowler, M. (2004)
  */
 
 class Product
@@ -15,6 +16,7 @@ class Product
         $this->conn = $conn;
     }
 
+    // Get active categories
     public function getActiveCategories(): array
     {
         $categoryQuery = $this->conn->query(
@@ -26,6 +28,7 @@ class Product
         return $categoryQuery->fetchAll(PDO::FETCH_ASSOC);
     }
 
+    // Create a new product
     public function create(int $categoryId, string $name, float $costPrice, float $sellingPrice, float $stockQuantity, string $saleUnit): void
     {
         $productQuery = $this->conn->prepare(
@@ -41,10 +44,10 @@ class Product
             'sale_unit' => $saleUnit,
         ]);
 
-        // Generate the barcode using the new product ID.
+        // Generate the barcode using the new product ID
         $productId = $this->conn->lastInsertId();
-
         $barcode = 'WEB' . str_pad($productId, 8, '0', STR_PAD_LEFT);
+
         $barcodeQuery = $this->conn->prepare(
             'UPDATE products
              SET barcode = :barcode
@@ -56,6 +59,7 @@ class Product
         ]);
     }
 
+    // Find a product by ID
     public function find(int $id): array|false
     {
         $productQuery = $this->conn->prepare(
@@ -69,6 +73,7 @@ class Product
         return $productQuery->fetch(PDO::FETCH_ASSOC);
     }
 
+    // Update a product
     public function update(int $id, int $categoryId, string $name, float $costPrice, float $sellingPrice, float $stockQuantity, string $saleUnit, int $isActive): void
     {
         $productQuery = $this->conn->prepare(
@@ -95,6 +100,7 @@ class Product
         ]);
     }
 
+    // Get the total number of products
     public function getCount()
     {
         $productQuery = $this->conn->query(
@@ -103,6 +109,7 @@ class Product
         return $productQuery->fetchColumn();
     }
 
+    // Get the number of low-stock products
     public function getLowStockCount($level = 5)
     {
         $productQuery = $this->conn->prepare(
@@ -116,7 +123,7 @@ class Product
         return $productQuery->fetchColumn();
     }
 
-    /* POS - Product queries*/
+    // Get active products available for sale
     public function getAvailableForSale()
     {
         $productQuery = $this->conn->query(
@@ -128,6 +135,7 @@ class Product
         return $productQuery->fetchAll(PDO::FETCH_ASSOC);
     }
 
+    // Find an active product by ID
     public function findAvailable(int $id)
     {
         $productQuery = $this->conn->prepare(
@@ -141,6 +149,7 @@ class Product
         return $productQuery->fetch(PDO::FETCH_ASSOC);
     }
 
+    // Get products for the current page
     public function getPaginated(string $search, int $limit, int $offset)
     {
 
@@ -168,6 +177,7 @@ class Product
         return $productQuery->fetchAll(PDO::FETCH_ASSOC);
     }
 
+    // Get the number of products matching the search
     public function getFilteredCount(string $search)
     {
         $sql = 'SELECT COUNT(*)

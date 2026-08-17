@@ -2,13 +2,15 @@
 
 /**
  * Handles POS requests.
+ * 
+ * Ref: Fowler, M. (2003) - https://sar.ac.id/stmik_ebook/prog_file_file/EFCofwzsj0.pdf
  */
+
 class PosController
 {
     private Product $productManager;
     private Cart $cart;
 
-    // Receive the Product model and Cart.
     public function __construct(
         Product $productManager,
         Cart $cart
@@ -21,10 +23,10 @@ class PosController
     {
         $error = '';
 
-        // Get products available for sale.
+        // Get products available for sale
         $products = $this->productManager->getAvailableForSale();
 
-        // Process POS actions.
+        // Process POS actions
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $action = $_POST['action'] ?? '';
 
@@ -59,12 +61,13 @@ class PosController
             }
         }
 
+        // Get cart data
         $cartItems = $this->cart->getItems();
         $cartTotal = $this->cart->getTotal();
 
         $pageTitle = 'POS';
 
-        // Load the POS view.
+        // Load the POS view
         require __DIR__ . '/../views/pos/index.php';
     }
 }

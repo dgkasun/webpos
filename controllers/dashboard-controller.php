@@ -2,6 +2,8 @@
 
 /**
  * Handles dashboard requests.
+ * 
+ * Ref: Fowler, M. (2003) - https://sar.ac.id/stmik_ebook/prog_file_file/EFCofwzsj0.pdf
  */
 class DashboardController
 {
@@ -9,7 +11,6 @@ class DashboardController
     private Product $productManager;
     private Category $categoryManager;
 
-    // Receive the required models.
     public function __construct(
         Sale $saleManager,
         Product $productManager,
@@ -22,7 +23,7 @@ class DashboardController
 
     public function index(): void
     {
-        // Get dashboard data.
+        // Get dashboard data
         $todaySales = $this->saleManager->getTodaySummary();
         $productCount = $this->productManager->getCount();
         $categoryCount = $this->categoryManager->getCount();
@@ -31,7 +32,7 @@ class DashboardController
         $pageTitle = 'Dashboard';
         $currentPage = 'Dashboard';
 
-        // Load the view.
+        // Load the view
         require __DIR__ . '/../views/dashboard/index.php';
     }
 }
