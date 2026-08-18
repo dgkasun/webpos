@@ -20,6 +20,7 @@ $currentPage = $currentPage ?? '';
             <li class="<?= $currentPage === 'Sales History' ? 'active' : '' ?>"><a href="sales-history.php">Sales History</a></li>
             <li class="<?= $currentPage === 'Reports' ? 'active' : '' ?>"><a href="sales-report.php">Reports</a></li>
             <li><a href="pos.php">POS</a></li>
+            <li class="<?= $currentPage === 'Settings' ? 'active' : '' ?>"><a href="settings.php">Settings</a></li>
             <li><a href="logout.php">Logout</a></li>
         </ul>
     </div>

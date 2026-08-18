@@ -70,3 +70,10 @@ CREATE TABLE sale_items (
         ON UPDATE CASCADE
         ON DELETE RESTRICT
 );
+
+CREATE TABLE settings (
+    shop_name VARCHAR(150) NOT NULL,
+    address VARCHAR(255) NULL,
+    phone VARCHAR(30) NULL,
+    thanks_footer VARCHAR(255) NULL
+);

@@ -9,10 +9,12 @@
 class SaleController
 {
     private Sale $saleManager;
+    private Setting $settingManager;
 
-    public function __construct(Sale $saleManager)
+    public function __construct(Sale $saleManager, Setting $settingManager)
     {
         $this->saleManager = $saleManager;
+        $this->settingManager = $settingManager;
     }
 
     public function history(): void
@@ -95,6 +97,18 @@ class SaleController
 
         // Get the items in the sale
         $saleItems = $this->saleManager->getItems($saleId);
+
+        // Get shop settings
+        $settings = $this->settingManager->get();
+
+        if (!$settings) {
+            $settings = [
+                'shop_name' => '',
+                'address' => '',
+                'phone' => '',
+                'receipt_footer' => '',
+            ];
+        }
 
         $numberOfItems = count($saleItems);
         $totalQuantity = 0;

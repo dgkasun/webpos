@@ -7,6 +7,7 @@
 /** @var string $from */
 /** @var string $fromDate */
 /** @var string $toDate */
+/** @var array $settings */
 ?>
 
 <?php include __DIR__ . '/../../includes/header.php'; ?>
@@ -31,9 +32,17 @@
                     <table>
                         <tr>
                             <td class="centeritem">
-                                POS TEXTILE<br>
-                                Colombo, SRI LANKA<br>
-                                Phone: 0123456789
+                                <?php if ($settings['shop_name'] !== ''): ?>
+                                    <strong><?= htmlspecialchars($settings['shop_name']) ?></strong><br>
+                                <?php endif; ?>
+
+                                <?php if (!empty($settings['address'])): ?>
+                                    <?= nl2br(htmlspecialchars($settings['address'])) ?><br>
+                                <?php endif; ?>
+
+                                <?php if (!empty($settings['phone'])): ?>
+                                    Phone: <?= htmlspecialchars($settings['phone']) ?>
+                                <?php endif; ?>
                             </td>
                         </tr>
                         <tr>
@@ -106,7 +115,9 @@
                         </tr>
                         <tr>
                             <td colspan="2" class="centeritem">
-                                THANK YOU.. COME AGAIN.!!!
+                                <?php if (!empty($settings['print_footer'])): ?>
+                                    <?= htmlspecialchars($settings['print_footer']) ?>
+                                <?php endif; ?>
                             </td>
                         </tr>
                     </table>

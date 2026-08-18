@@ -19,7 +19,8 @@ if ($saleId <= 0) {
 
 // Create the sale model and controller
 $saleManager = new Sale($conn);
-$saleController = new SaleController($saleManager);
+$settingManager = new Setting($conn);
+$saleController = new SaleController($saleManager, $settingManager);
 
 // Display the sale confirmation page
 $saleController->success($saleId);
