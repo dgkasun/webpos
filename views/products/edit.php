@@ -12,75 +12,75 @@
 
     <?php include __DIR__ . '/../../includes/menu.php'; ?>
     <div class="container">
-        <div class="page-header">
-            <div>
-                <h1>Edit Product</h1>
+        <?php include __DIR__ . '/../../includes/page-header.php'; ?>
+
+        <div class="content">
+            <p class="back"><a href="products.php"><img src="assets/images/arrow-left-long-solid-full.svg" /> Back to Products</a></p>
+            <?php if ($message !== ''): ?>
+                <p class="success">
+                    <?= htmlspecialchars($message) ?>
+                </p>
+            <?php endif; ?>
+
+            <?php if ($error !== ''): ?>
+                <p class="error">
+                    <?= htmlspecialchars($error) ?>
+                </p>
+            <?php endif; ?>
+
+            <div class="card">
+                <form method="post">
+                    <div class="form-group">
+                        <label for="name">Product Name</label>
+                        <input type="text" id="name" name="name" maxlength="150" value="<?= htmlspecialchars($product['name']) ?>" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="category_id">Category</label>
+                        <select id="category_id" name="category_id" required>
+                            <option value="">Select a category</option>
+                            <?php foreach ($categories as $category): ?>
+                                <option value="<?= $category['id'] ?>" <?= $product['category_id'] === $category['id'] ? 'selected' : '' ?>>
+                                    <?= htmlspecialchars($category['name']) ?>
+                                </option>
+                            <?php endforeach; ?>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="cost_price">Cost Price</label>
+                        <input type="number" id="cost_price" name="cost_price" min="0" step="0.01" value="<?= $product['cost_price'] ?>" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="selling_price">Selling Price</label>
+                        <input type="number" id="selling_price" name="selling_price" min="0" step="0.01" value="<?= $product['selling_price'] ?>" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="stock_quantity">Stock Quantity</label>
+                        <input type="number" id="stock_quantity" name="stock_quantity" min="0" step="<?= $product['sale_unit'] === 'unit' ? '1' : '0.01' ?>" value="<?= $product['sale_unit'] === 'unit' ? number_format($product['stock_quantity'], 0, '.', '') : number_format($product['stock_quantity'], 2, '.', '') ?>" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="is_active">
+                            <input type="checkbox" id="is_active" name="is_active" value="1" <?= $product['is_active'] == 1 ? 'checked' : '' ?>> Active
+                        </label>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="sale_unit">Selling Unit</label>
+                        <select id="sale_unit" name="sale_unit" required>
+                            <option value="unit" <?= $product['sale_unit'] === 'unit' ? 'selected' : '' ?>> Unit</option>
+                            <option value="metre" <?= $product['sale_unit'] === 'metre' ? 'selected' : '' ?>>Metre</option>
+                            <option value="yard" <?= $product['sale_unit'] === 'yard' ? 'selected' : '' ?>>Yard</option>
+                        </select>
+                    </div>
+
+                    <button type="submit">Update Product</button>
+                </form>
             </div>
-            <a href="products.php">Back to Products</a>
         </div>
-
-        <?php if ($message !== ''): ?>
-            <p class="success">
-                <?= htmlspecialchars($message) ?>
-            </p>
-        <?php endif; ?>
-
-        <?php if ($error !== ''): ?>
-            <p class="error">
-                <?= htmlspecialchars($error) ?>
-            </p>
-        <?php endif; ?>
-
-        <form method="post">
-            <div class="form-group">
-                <label for="name">Product Name</label>
-                <input type="text" id="name" name="name" maxlength="150" value="<?= htmlspecialchars($product['name']) ?>" required>
-            </div>
-
-            <div class="form-group">
-                <label for="category_id">Category</label>
-                <select id="category_id" name="category_id" required>
-                    <option value="">Select a category</option>
-                    <?php foreach ($categories as $category): ?>
-                        <option value="<?= $category['id'] ?>" <?= $product['category_id'] === $category['id'] ? 'selected' : '' ?>>
-                            <?= htmlspecialchars($category['name']) ?>
-                        </option>
-                    <?php endforeach; ?>
-                </select>
-            </div>
-
-            <div class="form-group">
-                <label for="cost_price">Cost Price</label>
-                <input type="number" id="cost_price" name="cost_price" min="0" step="0.01" value="<?= $product['cost_price'] ?>" required>
-            </div>
-
-            <div class="form-group">
-                <label for="selling_price">Selling Price</label>
-                <input type="number" id="selling_price" name="selling_price" min="0" step="0.01" value="<?= $product['selling_price'] ?>" required>
-            </div>
-
-            <div class="form-group">
-                <label for="stock_quantity">Stock Quantity</label>
-                <input type="number" id="stock_quantity" name="stock_quantity" min="0" step="<?= $product['sale_unit'] === 'unit' ? '1' : '0.01' ?>" value="<?= $product['sale_unit'] === 'unit' ? number_format($product['stock_quantity'], 0, '.', '') : number_format($product['stock_quantity'], 2, '.', '') ?>" required>
-            </div>
-
-            <div class="form-group">
-                <label for="is_active">
-                    <input type="checkbox" id="is_active" name="is_active" value="1" <?= $product['is_active'] == 1 ? 'checked' : '' ?>> Active
-                </label>
-            </div>
-
-            <div class="form-group">
-                <label for="sale_unit">Selling Unit</label>
-                <select id="sale_unit" name="sale_unit" required>
-                    <option value="unit" <?= $product['sale_unit'] === 'unit' ? 'selected' : '' ?>> Unit</option>
-                    <option value="metre" <?= $product['sale_unit'] === 'metre' ? 'selected' : '' ?>>Metre</option>
-                    <option value="yard" <?= $product['sale_unit'] === 'yard' ? 'selected' : '' ?>>Yard</option>
-                </select>
-            </div>
-
-            <button type="submit">Update Product</button>
-        </form>
     </div>
 </main>
 

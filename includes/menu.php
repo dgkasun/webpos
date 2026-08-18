@@ -12,6 +12,7 @@ $currentPage = $currentPage ?? '';
 
 <div class="dashboard-links">
     <div class="container">
+        <h2><img src="assets/images/cart-shopping-solid-full.svg" /> WebPOS</h2>
         <ul>
             <li class="<?= $currentPage === 'Dashboard' ? 'active' : '' ?>"><a href="dashboard.php">Dashboard</a></li>
             <li class="<?= $currentPage === 'Categories' ? 'active' : '' ?>"><a href="categories.php">Categories</a></li>

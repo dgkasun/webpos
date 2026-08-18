@@ -1,13 +1,11 @@
 <!-- Displays the POS nav menu. -->
-<div class="pos-menu">
+<div class="dashboard-links">
     <div class="container">
-        <div class="pos-header">
-            <div>
-                <h1>POS</h1>
-            </div>
-            <div class="pos-header-actions">
-                <a href="pos.php">POS</a> | <a href="dashboard.php">Dashboard</a> | <a href="logout.php">Logout</a>
-            </div>
-        </div>
+        <h2><img src="assets/images/cart-shopping-solid-full.svg" /> WebPOS</h2>
+        <ul>
+            <li class="active"><a href="pos.php">POS</a></li>
+            <li><a href="dashboard.php">Dashboard</a></li>
+            <li><a href="logout.php">Logout</a></li>
+        </ul>
     </div>
 </div>

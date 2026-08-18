@@ -13,81 +13,85 @@
     <?php include __DIR__ . '/../../includes/pos-menu.php'; ?>
 
     <div class="container">
+        <?php include __DIR__ . '/../../includes/page-header.php'; ?>
 
-        <?php if ($error !== ''): ?>
-            <p class="error">
-                <?= htmlspecialchars($error) ?>
-            </p>
-        <?php endif; ?>
+        <div class="content">
+            <?php if ($error !== ''): ?>
+                <p class="error">
+                    <?= htmlspecialchars($error) ?>
+                </p>
+            <?php endif; ?>
 
-        <section class="pos-search">
-            <div class="form-group product-search-wrapper">
-                <label for="product_search">Search Product</label>
-                <input type="text" id="product_search" placeholder="Type product name" autocomplete="off" autofocus>
-                <div id="product_results" class="product-results"></div>
-            </div>
-        </section>
-
-        <form method="post" id="add_product_form" style="display: none;">
-            <input type="hidden" name="action" value="add">
-            <input type="hidden" name="product_id" id="selected_product_id">
-            <input type="hidden" name="quantity" value="1">
-        </form>
-
-        <hr>
-
-        <h2>Current Sale</h2>
-
-        <?php if (empty($cartItems)): ?>
-            <p>No products have been added.</p>
-        <?php else: ?>
-            <form method="post">
-                <input type="hidden" name="action" value="update">
-
-                <div class="table-wrapper mb20">
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>Product</th>
-                                <th>Unit Price</th>
-                                <th>Quantity</th>
-                                <th>Subtotal</th>
-                                <th>Action</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <?php foreach ($cartItems as $item): ?>
-                                <?php $subtotal = $item['price'] * $item['quantity'];
-                                $quantityStep = $item['sale_unit'] === 'unit' ? '1' : '0.25'; ?>
-                                <tr>
-                                    <td><?= htmlspecialchars($item['name']) ?></td>
-                                    <td>Rs. <?= number_format($item['price'], 2) ?></td>
-                                    <td><input type="number" name="quantities[<?= $item['id'] ?>]" value="<?= $item['quantity'] ?>" min="<?= $quantityStep ?>" step="<?= $quantityStep ?>" max="<?= $item['stock_quantity'] ?>"></td>
-                                    <td>Rs. <?= number_format($subtotal, 2) ?></td>
-                                    <td><button type="submit" name="remove_product" formaction="remove-cart-item.php" value="<?= $item['id'] ?>">Remove</button>
-                                    </td>
-                                </tr>
-                            <?php endforeach; ?>
-                        </tbody>
-                        <tfoot>
-                            <tr>
-                                <th colspan="3">Total</th>
-                                <th colspan="2">Rs. <?= number_format($cartTotal, 2) ?></th>
-                            </tr>
-                        </tfoot>
-                    </table>
-                </div>
-                <button type="submit">Update Cart</button>
-            </form>
-
-            <div class="cart-actions alignright">
-                <form method="post">
-                    <input type="hidden" name="action" value="clear">
-                    <button type="submit">Clear Cart</button>
+            <div class="card mb30">
+                <section class="pos-search">
+                    <div class="form-group product-search-wrapper">
+                        <label for="product_search">Search Product</label>
+                        <input type="text" id="product_search" placeholder="Type product name" autocomplete="off" autofocus>
+                        <div id="product_results" class="product-results"></div>
+                    </div>
+                </section>
+                <form method="post" id="add_product_form" style="display: none;">
+                    <input type="hidden" name="action" value="add">
+                    <input type="hidden" name="product_id" id="selected_product_id">
+                    <input type="hidden" name="quantity" value="1">
                 </form>
-                <a class="button-link xl-btn" href="checkout.php">Payment</a>
             </div>
-        <?php endif; ?>
+
+            <div class="card">
+                <h2>Current Sale</h2>
+
+                <?php if (empty($cartItems)): ?>
+                    <p>No products have been added.</p>
+                <?php else: ?>
+                    <form method="post">
+                        <input type="hidden" name="action" value="update">
+
+                        <div class="table-wrapper mb20">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Product</th>
+                                        <th>Unit Price</th>
+                                        <th>Quantity</th>
+                                        <th>Subtotal</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <?php foreach ($cartItems as $item): ?>
+                                        <?php $subtotal = $item['price'] * $item['quantity'];
+                                        $quantityStep = $item['sale_unit'] === 'unit' ? '1' : '0.25'; ?>
+                                        <tr>
+                                            <td><?= htmlspecialchars($item['name']) ?></td>
+                                            <td>Rs. <?= number_format($item['price'], 2) ?></td>
+                                            <td><input type="number" name="quantities[<?= $item['id'] ?>]" value="<?= $item['quantity'] ?>" min="<?= $quantityStep ?>" step="<?= $quantityStep ?>" max="<?= $item['stock_quantity'] ?>"></td>
+                                            <td>Rs. <?= number_format($subtotal, 2) ?></td>
+                                            <td><button class="redborder-btn" type="submit" name="remove_product" formaction="remove-cart-item.php" value="<?= $item['id'] ?>">Remove</button>
+                                            </td>
+                                        </tr>
+                                    <?php endforeach; ?>
+                                </tbody>
+                                <tfoot>
+                                    <tr>
+                                        <th colspan="3">Total</th>
+                                        <th colspan="2">Rs. <?= number_format($cartTotal, 2) ?></th>
+                                    </tr>
+                                </tfoot>
+                            </table>
+                        </div>
+                        <button type="submit">Update Cart</button>
+                    </form>
+
+                    <div class="cart-actions alignright">
+                        <form method="post">
+                            <input type="hidden" name="action" value="clear">
+                            <button type="submit" class="redborder-btn">Clear Cart</button>
+                        </form>
+                        <a class="button-link xl-btn" href="checkout.php">Payment</a>
+                    </div>
+                <?php endif; ?>
+            </div>
+        </div>
     </div>
 </main>
 
