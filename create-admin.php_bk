@@ -1,0 +1,25 @@
+<?php
+// TODO: Delete after run
+
+require_once __DIR__ . '/config/database.php';
+
+$name = 'Administrator';
+$username = 'admin';
+$password = password_hash('admin123', PASSWORD_DEFAULT);
+$role = 'admin';
+
+$sql = "
+    INSERT INTO users (name, username, password, role)
+    VALUES (:name, :username, :password, :role)
+";
+
+$stmt = $conn->prepare($sql);
+
+$stmt->execute([
+    'name' => $name,
+    'username' => $username,
+    'password' => $password,
+    'role' => $role,
+]);
+
+echo 'Admin user created successfully.';
