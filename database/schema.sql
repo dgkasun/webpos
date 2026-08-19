@@ -42,6 +42,7 @@ CREATE TABLE sales (
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     cash_received DECIMAL(10,2) NULL,
     change_amount DECIMAL(10,2) NULL,
+    started_at TIMESTAMP NULL,
 
     CONSTRAINT fk_sales_user
         FOREIGN KEY (user_id)

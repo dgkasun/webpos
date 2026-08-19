@@ -4,6 +4,9 @@
  * Loads the files required by the application.
  */
 
+// Set application timezone
+date_default_timezone_set('Asia/Colombo');
+
 // Start the session
 session_start();
 

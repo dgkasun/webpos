@@ -99,6 +99,7 @@
                                     <th>Cashier</th>
                                     <th>Payment</th>
                                     <th>Total</th>
+                                    <th>Avg Time</th>
                                     <th>Action</th>
                                 </tr>
                             </thead>
@@ -110,6 +111,13 @@
                                         <td><?= htmlspecialchars($sale['cashier_name']) ?></td>
                                         <td><?= htmlspecialchars(ucfirst($sale['payment_method'])) ?></td>
                                         <td>Rs. <?= number_format($sale['total_amount'], 2) ?></td>
+                                        <td>
+                                            <?php if ($sale['transaction_time'] !== null): ?>
+                                                <?= $sale['transaction_time'] ?>s
+                                            <?php else: ?>
+                                                -
+                                            <?php endif; ?>
+                                        </td>
                                         <td><a href="sale-success.php?id=<?= $sale['id'] ?>&from=report">View</a></td>
                                     </tr>
                                 <?php endforeach; ?>

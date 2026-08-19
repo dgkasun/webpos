@@ -62,7 +62,7 @@ class Sale
     }
 
     // Create a sale and update product stock
-    public function create(int $userId, array $items, float $totalAmount, string $paymentMethod, ?float $cashReceived, ?float $changeAmount)
+    public function create(int $userId, array $items, float $totalAmount, string $paymentMethod, ?float $cashReceived, ?float $changeAmount, ?string $startedAt)
     {
         try {
             // Start the transaction
@@ -70,8 +70,8 @@ class Sale
 
             // Create sale record
             $saleQuery = $this->conn->prepare(
-                'INSERT INTO sales (user_id, total_amount, payment_method, cash_received, change_amount
-                ) VALUES (:user_id, :total_amount, :payment_method, :cash_received, :change_amount)'
+                'INSERT INTO sales (user_id, total_amount, payment_method, cash_received, change_amount, started_at
+                ) VALUES (:user_id, :total_amount, :payment_method, :cash_received, :change_amount, :started_at)'
             );
 
             $saleQuery->execute([
@@ -80,6 +80,7 @@ class Sale
                 'payment_method' => $paymentMethod,
                 'cash_received' => $cashReceived,
                 'change_amount' => $changeAmount,
+                'started_at' => $startedAt,
             ]);
 
             $saleId = $this->conn->lastInsertId();
@@ -157,7 +158,8 @@ class Sale
     public function getByDateRange(string $fromDate, string $toDate)
     {
         $salesQuery = $this->conn->prepare(
-            'SELECT sales.id, sales.total_amount, sales.payment_method, sales.created_at, users.name AS cashier_name
+            'SELECT sales.id, sales.total_amount, sales.payment_method, sales.created_at, users.name AS cashier_name, TIMESTAMPDIFF(
+                    SECOND, sales.started_at, sales.created_at) AS transaction_time
             FROM sales
             INNER JOIN users ON users.id = sales.user_id
             WHERE DATE(sales.created_at) BETWEEN :from_date AND :to_date

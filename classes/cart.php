@@ -28,6 +28,11 @@ class Cart
             return 'Not enough stock available.';
         }
 
+        // Start the sale timer
+        if (empty($_SESSION['cart'])) {
+            $_SESSION['sale_started_at'] = date('Y-m-d H:i:s');
+        }
+
         $_SESSION['cart'][$productId] = [
             'id' => $productId,
             'name' => $product['name'],
@@ -69,12 +74,16 @@ class Cart
     public function remove(int $productId)
     {
         unset($_SESSION['cart'][$productId]);
+        if (empty($_SESSION['cart'])) {
+            unset($_SESSION['sale_started_at']);
+        }
     }
 
     // Clear all products from the cart
     public function clear()
     {
         $_SESSION['cart'] = [];
+        unset($_SESSION['sale_started_at']);
     }
 
     // Get all cart items

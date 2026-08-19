@@ -68,7 +68,8 @@ class CheckoutController
                         $cartTotal,
                         $paymentMethod,
                         $cashReceivedAmount,
-                        $changeAmount
+                        $changeAmount,
+                        $_SESSION['sale_started_at'] ?? null
                     );
 
                     // Clear the cart after a successful sale
