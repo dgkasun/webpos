@@ -9,7 +9,7 @@
 $host = 'localhost';
 $database = 'webpos';
 $username = 'root';
-$password = 'root';
+$password = '';
 
 try {
     // Connect to the MySQL database

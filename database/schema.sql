@@ -55,7 +55,7 @@ CREATE TABLE sale_items (
     id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
     sale_id INT UNSIGNED NOT NULL,
     product_id INT UNSIGNED NOT NULL,
-    quantity DECIMAL(10,2) NOT NULL;
+    quantity DECIMAL(10,2) NOT NULL,
     unit_price DECIMAL(10,2) NOT NULL,
     subtotal DECIMAL(10,2) NOT NULL,
 
