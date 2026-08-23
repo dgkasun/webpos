@@ -6,10 +6,12 @@
  * Ref: PHP PDO - https://www.php.net/manual/en/book.pdo.php
  */
 
-$host = 'localhost';
-$database = 'webpos';
-$username = 'root';
-$password = '';
+$config = require __DIR__ . '/config.php';
+
+$host = $config['database']['host'];
+$database = $config['database']['name'];
+$username = $config['database']['username'];
+$password = $config['database']['password'];
 
 try {
     // Connect to the MySQL database
