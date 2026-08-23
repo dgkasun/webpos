@@ -115,6 +115,7 @@
                                     <th>Selling Price</th>
                                     <th>Stock</th>
                                     <th>Status</th>
+                                    <th>Print Barcode</th>
                                     <th>Action</th>
                                 </tr>
                             </thead>
@@ -134,6 +135,7 @@
                                             <?php endif; ?>
                                         </td>
                                         <td><?= $product['is_active'] ? 'Active' : 'Inactive' ?></td>
+                                        <td><a href="print-barcode.php?id=<?= $product['id']; ?>" target="_blank">Print</a></td>
                                         <td><a href="edit-product.php?id=<?= $product['id'] ?>">Edit</a></td>
                                     </tr>
                                 <?php endforeach; ?>
