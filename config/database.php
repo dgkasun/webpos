@@ -19,6 +19,9 @@ try {
 
     // Throw an exception if an error occurs
     $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+
+    // Set MySQL to Sri Lanka time
+    $conn->exec("SET time_zone = '+05:30'");
 } catch (PDOException $e) {
     exit('Database connection failed.');
 }
