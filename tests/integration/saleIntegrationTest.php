@@ -42,13 +42,12 @@ class SaleIntegrationTest extends TestCase
 
         // Add a test category
         $categoryQuery = $this->conn->prepare(
-            'INSERT INTO categories (name, description, is_active)
-             VALUES (:name, :description, :is_active)'
+            'INSERT INTO categories (name, is_active)
+             VALUES (:name, :is_active)'
         );
 
         $categoryQuery->execute([
             'name' => 'Test Category',
-            'description' => 'Integration test category',
             'is_active' => 1
         ]);
 

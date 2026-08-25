@@ -33,10 +33,6 @@
                         <label for="name">Category Name</label>
                         <input type="text" id="name" name="name" maxlength="100" required>
                     </div>
-                    <div class="form-group">
-                        <label for="description">Description</label>
-                        <textarea id="description" name="description" maxlength="255" rows="3"></textarea>
-                    </div>
                     <button type="submit">Add Category</button>
                 </form>
             </div>
@@ -51,7 +47,6 @@
                             <thead>
                                 <tr>
                                     <th>Category</th>
-                                    <th>Description</th>
                                     <th>Status</th>
                                     <th>Action</th>
                                 </tr>
@@ -60,7 +55,6 @@
                                 <?php foreach ($categories as $category): ?>
                                     <tr>
                                         <td><?= htmlspecialchars($category['name']) ?></td>
-                                        <td><?= htmlspecialchars($category['description'] ?? '') ?></td>
                                         <td><?= $category['is_active'] ? 'Active' : 'Inactive' ?></td>
                                         <td><a href="edit-category.php?id=<?= (int) $category['id'] ?>">Edit</a></td>
                                     </tr>

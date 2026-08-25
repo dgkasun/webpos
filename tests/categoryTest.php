@@ -18,10 +18,10 @@ class CategoryTest extends TestCase
     {
         // Example categories
         $categoryData = [
-            ['id' => 1, 'name' => 'Shirts', 'description' => 'Men shirts', 'is_active' => 1],
-            ['id' => 2, 'name' => 'Trousers', 'description' => 'Men trousers', 'is_active' => 1],
-            ['id' => 3, 'name' => 'Denim', 'description' => '', 'is_active' => 1],
-            ['id' => 4, 'name' => 'Belts', 'description' => '', 'is_active' => 0]
+            ['id' => 1, 'name' => 'Shirts', 'is_active' => 1],
+            ['id' => 2, 'name' => 'Trousers', 'is_active' => 1],
+            ['id' => 3, 'name' => 'Denim', 'is_active' => 1],
+            ['id' => 4, 'name' => 'Belts', 'is_active' => 0]
         ];
 
         // Mock the database query
@@ -50,7 +50,7 @@ class CategoryTest extends TestCase
 
         $query->expects($this->once())
             ->method('execute')
-            ->with(['name' => 'Shirts', 'description' => 'Men shirts']);
+            ->with(['name' => 'Shirts']);
 
         // Mock the database connection
         $conn = $this->createMock(PDO::class);
@@ -60,31 +60,7 @@ class CategoryTest extends TestCase
         $category = new Category($conn);
 
         // Create a new category
-        $category->create('Shirts', 'Men shirts');
-
-        // Confirm the test reached this point
-        $this->assertTrue(true);
-    }
-
-    // Test creating a category without a description
-    public function testCreateCategoryWithEmptyDescription(): void
-    {
-        // Mock the database query
-        $query = $this->createMock(PDOStatement::class);
-
-        $query->expects($this->once())
-            ->method('execute')
-            ->with(['name' => 'Shirts', 'description' => null]);
-
-        // Mock the database connection
-        $conn = $this->createMock(PDO::class);
-        $conn->method('prepare')->willReturn($query);
-
-        // Create the Category
-        $category = new Category($conn);
-
-        // Create a category without a description
-        $category->create('Shirts', '');
+        $category->create('Shirts');
 
         // Confirm the test reached this point
         $this->assertTrue(true);
@@ -94,7 +70,7 @@ class CategoryTest extends TestCase
     public function testFindCategory(): void
     {
         // Example category
-        $categoryData = ['id' => 1, 'name' => 'Shirts', 'description' => 'Men shirts', 'is_active' => 1];
+        $categoryData = ['id' => 1, 'name' => 'Shirts', 'is_active' => 1];
 
         // Mock the database query
         $query = $this->createMock(PDOStatement::class);
@@ -143,7 +119,7 @@ class CategoryTest extends TestCase
 
         $query->expects($this->once())
             ->method('execute')
-            ->with(['name' => 'Casual Shirts', 'description' => 'Updated description', 'is_active' => 1, 'id' => 1]);
+            ->with(['name' => 'Casual Shirts', 'is_active' => 1, 'id' => 1]);
 
         // Mock the database connection
         $conn = $this->createMock(PDO::class);
@@ -153,31 +129,7 @@ class CategoryTest extends TestCase
         $category = new Category($conn);
 
         // Update the category
-        $category->update(1, 'Casual Shirts', 'Updated description', 1);
-
-        // Confirm the test reached this point
-        $this->assertTrue(true);
-    }
-
-    // Test updating a category without a description
-    public function testUpdateCategoryWithEmptyDescription(): void
-    {
-        // Mock the database query
-        $query = $this->createMock(PDOStatement::class);
-
-        $query->expects($this->once())
-            ->method('execute')
-            ->with(['name' => 'Casual Shirts', 'description' => null, 'is_active' => 0, 'id' => 1]);
-
-        // Mock the database connection
-        $conn = $this->createMock(PDO::class);
-        $conn->method('prepare')->willReturn($query);
-
-        // Create the Category
-        $category = new Category($conn);
-
-        // Update the category without a description
-        $category->update(1, 'Casual Shirts', '', 0);
+        $category->update(1, 'Casual Shirts', 1);
 
         // Confirm the test reached this point
         $this->assertTrue(true);

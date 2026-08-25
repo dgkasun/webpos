@@ -33,11 +33,6 @@ include __DIR__ . '/../../includes/header.php'; ?>
                     </div>
 
                     <div class="form-group">
-                        <label for="description">Description</label>
-                        <textarea id="description" name="description" maxlength="255" rows="3"><?= htmlspecialchars($category['description'] ?? '') ?></textarea>
-                    </div>
-
-                    <div class="form-group">
                         <label for="is_active">
                             <input type="checkbox" id="is_active" name="is_active" value="1" <?= $category['is_active'] == 1 ? 'checked' : '' ?>> Active
                         </label>

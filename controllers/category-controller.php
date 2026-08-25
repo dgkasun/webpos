@@ -23,13 +23,12 @@ class CategoryController
         // Process the add category request
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $name = trim($_POST['name'] ?? '');
-            $description = trim($_POST['description'] ?? '');
 
             if ($name === '') {
                 $error = 'Category name is required.';
             } else {
                 try {
-                    $this->categoryManager->create($name, $description);
+                    $this->categoryManager->create($name);
                     $message = 'Category added successfully.';
                 } catch (PDOException $e) {
                     // Check for a duplicate category
@@ -67,14 +66,13 @@ class CategoryController
         // Process the update category request
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $name = trim($_POST['name'] ?? '');
-            $description = trim($_POST['description'] ?? '');
             $isActive = isset($_POST['is_active']) ? 1 : 0;
 
             if ($name === '') {
                 $error = 'Category name is required.';
             } else {
                 try {
-                    $this->categoryManager->update($categoryId, $name, $description, $isActive);
+                    $this->categoryManager->update($categoryId, $name, $isActive);
                     $message = 'Category updated successfully.';
 
                     // Get the updated category
