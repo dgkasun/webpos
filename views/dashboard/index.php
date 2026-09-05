@@ -47,12 +47,31 @@
                 </div>
 
                 <div class="dashboard-card">
-                    <h2>Low Stock Products</h2>
-                    <p class="dashboard-number">
-                        <?= $lowStockCount ?>
-                    </p>
+                    <h2>Low Stock Products: <?= $lowStockCount ?></h2>
+                    <?php if (!empty($lowStockProducts)): ?>
+                        <table>
+                            <tbody>
+                                <?php foreach ($lowStockProducts as $product): ?>
+                                    <tr>
+                                        <td><?= htmlspecialchars($product['name']) ?></td>
+                                        <td>
+                                            <?php if ($product['sale_unit'] === 'unit'): ?>
+                                                <?= number_format($product['stock_quantity'], 0) ?>
+                                            <?php else: ?>
+                                                <?= number_format($product['stock_quantity'], 2) ?>
+                                            <?php endif; ?>
+                                        </td>
+                                    </tr>
+                                <?php endforeach; ?>
+                            </tbody>
+                        </table>
+                    <?php endif; ?>
                 </div>
             </div>
+
+
+
+
         </div>
     </div>
 

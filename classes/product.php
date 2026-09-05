@@ -201,4 +201,25 @@ class Product
 
         return $productQuery->fetchColumn();
     }
+
+
+    // Get low-stock products
+    public function getLowStockProducts($level = 5)
+    {
+        $productQuery = $this->conn->prepare(
+            'SELECT  products.id, products.name, products.stock_quantity, products.sale_unit, categories.name AS category_name
+            FROM products
+            INNER JOIN categories
+                ON categories.id = products.category_id
+            WHERE products.stock_quantity <= :level
+                AND products.is_active = 1
+            ORDER BY products.stock_quantity ASC, products.name ASC'
+        );
+
+        $productQuery->execute([
+            'level' => $level,
+        ]);
+
+        return $productQuery->fetchAll(PDO::FETCH_ASSOC);
+    }
 }

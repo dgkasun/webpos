@@ -28,6 +28,7 @@ class DashboardController
         $productCount = $this->productManager->getCount();
         $categoryCount = $this->categoryManager->getCount();
         $lowStockCount = $this->productManager->getLowStockCount();
+        $lowStockProducts = $this->productManager->getLowStockProducts();
 
         $pageTitle = 'Dashboard';
         $currentPage = 'Dashboard';
