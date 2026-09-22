@@ -129,4 +129,10 @@
     </div>
 </main>
 
+<script>
+    window.addEventListener('load', function() {
+        window.print();
+    });
+</script>
+
 <?php include __DIR__ . '/../../includes/footer.php'; ?>
