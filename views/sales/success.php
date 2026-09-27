@@ -71,7 +71,7 @@
                                     <?php
                                     foreach ($saleItems as $item): ?>
                                         <tr>
-                                            <td><?= htmlspecialchars($item['product_name']) ?></td>
+                                            <td><?= htmlspecialchars($item['product_name']) ?> <?= htmlspecialchars($item['category_name']) ?></td>
                                             <td><?= $item['quantity'] ?></td>
                                             <td><?= number_format($item['unit_price'], 2) ?></td>
                                             <td><?= number_format($item['subtotal'], 2) ?></td>

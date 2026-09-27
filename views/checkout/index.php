@@ -39,7 +39,7 @@
                             <?php foreach ($cartItems as $item): ?>
                                 <?php $subtotal = $item['price'] * $item['quantity']; ?>
                                 <tr>
-                                    <td><?= htmlspecialchars($item['name']) ?></td>
+                                    <td><?= htmlspecialchars($item['name']) ?> <small><?= htmlspecialchars($item['category_name']) ?></small></td>
                                     <td>Rs. <?= number_format($item['price'], 2) ?>
                                     </td>
                                     <td><?= $item['quantity'] ?></td>

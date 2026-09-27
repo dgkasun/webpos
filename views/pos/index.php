@@ -62,7 +62,7 @@
                                         <?php $subtotal = $item['price'] * $item['quantity'];
                                         $quantityStep = $item['sale_unit'] === 'unit' ? '1' : '0.25'; ?>
                                         <tr>
-                                            <td><?= htmlspecialchars($item['name']) ?></td>
+                                            <td><?= htmlspecialchars($item['name']) ?> <small><?= htmlspecialchars($item['category_name']) ?></small></td>
                                             <td>Rs. <?= number_format($item['price'], 2) ?></td>
                                             <td><input type="number" name="quantities[<?= $item['id'] ?>]" value="<?= $item['quantity'] ?>" min="<?= $quantityStep ?>" step="<?= $quantityStep ?>" max="<?= $item['stock_quantity'] ?>"></td>
                                             <td>Rs. <?= number_format($subtotal, 2) ?></td>
@@ -122,7 +122,7 @@
             result.classList.add('product-result');
 
             result.innerHTML =
-                '<strong>' + product.name + '</strong>' +
+                '<strong>' + product.name + ' - ' + product.category_name + '</strong>' +
                 '<span>Rs. ' + parseFloat(product.selling_price).toFixed(2) + ' | Stock: ' + product.stock_quantity + '</span>';
 
             result.addEventListener('click', function() {

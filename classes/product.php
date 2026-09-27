@@ -127,10 +127,11 @@ class Product
     public function getAvailableForSale()
     {
         $productQuery = $this->conn->query(
-            'SELECT id, name, selling_price, stock_quantity, barcode, sale_unit
-            FROM products
-            WHERE is_active = 1 AND stock_quantity > 0
-            ORDER BY name ASC'
+            'SELECT p.id, p.name, p.selling_price, p.stock_quantity, p.barcode, p.sale_unit, c.name AS category_name
+            FROM products p
+            LEFT JOIN categories c ON p.category_id = c.id
+            WHERE p.is_active = 1 AND p.stock_quantity > 0
+            ORDER BY p.name ASC'
         );
         return $productQuery->fetchAll(PDO::FETCH_ASSOC);
     }
@@ -139,9 +140,10 @@ class Product
     public function findAvailable(int $id)
     {
         $productQuery = $this->conn->prepare(
-            'SELECT id, name, selling_price, stock_quantity, sale_unit
-            FROM products
-            WHERE id = :id AND is_active = 1'
+            'SELECT p.id, p.name, p.selling_price, p.stock_quantity, p.sale_unit, c.name AS category_name
+            FROM products p
+            LEFT JOIN categories c ON p.category_id = c.id
+            WHERE p.id = :id AND p.is_active = 1'
         );
         $productQuery->execute([
             'id' => $id,

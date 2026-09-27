@@ -36,6 +36,7 @@ class Cart
         $_SESSION['cart'][$productId] = [
             'id' => $productId,
             'name' => $product['name'],
+            'category_name' => $product['category_name'],
             'price' => $product['selling_price'],
             'quantity' => $newQuantity,
             'stock_quantity' => $product['stock_quantity'],

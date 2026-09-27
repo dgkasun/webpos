@@ -23,7 +23,7 @@ class CartTest extends TestCase
     public function testAddProduct(): void
     {
         // Example product
-        $productData = ['id' => 1, 'name' => 'Blue Shirt', 'selling_price' => 2000, 'stock_quantity' => 10, 'sale_unit' => 'item'];
+        $productData = ['id' => 1, 'name' => 'Blue Shirt', 'category_name' => 'Shirts', 'selling_price' => 2000, 'stock_quantity' => 10, 'sale_unit' => 'item'];
 
         // Create the Cart
         $cart = new Cart();
@@ -42,13 +42,16 @@ class CartTest extends TestCase
 
         // Check the product name
         $this->assertEquals('Blue Shirt', $items[1]['name']);
+
+        // Check the product category
+        $this->assertEquals('Shirts', $items[1]['category_name']);
     }
 
     // Test adding the same product more than once
     public function testAddSameProductTwice(): void
     {
         // Example product
-        $productData = ['id' => 1, 'name' => 'Blue Shirt', 'selling_price' => 2000, 'stock_quantity' => 10, 'sale_unit' => 'item'];
+        $productData = ['id' => 1, 'name' => 'Blue Shirt', 'category_name' => 'Shirts', 'selling_price' => 2000, 'stock_quantity' => 10, 'sale_unit' => 'item'];
 
         // Create the Cart
         $cart = new Cart();
@@ -93,7 +96,7 @@ class CartTest extends TestCase
     public function testUpdateProductQuantity(): void
     {
         // Example product
-        $productData = ['id' => 1, 'name' => 'Blue Shirt', 'selling_price' => 2000, 'stock_quantity' => 10, 'sale_unit' => 'item'];
+        $productData = ['id' => 1, 'name' => 'Blue Shirt', 'category_name' => 'Shirts', 'selling_price' => 2000, 'stock_quantity' => 10, 'sale_unit' => 'item'];
 
         // Create the Cart
         $cart = new Cart();
@@ -118,7 +121,7 @@ class CartTest extends TestCase
     public function testUpdateProductExceedsStock(): void
     {
         // Example product
-        $productData = ['id' => 1, 'name' => 'Blue Shirt', 'selling_price' => 2000, 'stock_quantity' => 5, 'sale_unit' => 'item'];
+        $productData = ['id' => 1, 'name' => 'Blue Shirt', 'category_name' => 'Shirts', 'selling_price' => 2000, 'stock_quantity' => 5, 'sale_unit' => 'item'];
 
         // Create the Cart
         $cart = new Cart();
@@ -143,7 +146,7 @@ class CartTest extends TestCase
     public function testUpdateProductQuantityToZero(): void
     {
         // Example product
-        $productData = ['id' => 1, 'name' => 'Blue Shirt', 'selling_price' => 2000, 'stock_quantity' => 10, 'sale_unit' => 'item'];
+        $productData = ['id' => 1, 'name' => 'Blue Shirt', 'category_name' => 'Shirts', 'selling_price' => 2000, 'stock_quantity' => 10, 'sale_unit' => 'item'];
 
         // Create the Cart
         $cart = new Cart();
@@ -168,7 +171,7 @@ class CartTest extends TestCase
     public function testRemoveProduct(): void
     {
         // Example product
-        $productData = ['id' => 1, 'name' => 'Blue Shirt', 'selling_price' => 2000, 'stock_quantity' => 10, 'sale_unit' => 'item'];
+        $productData = ['id' => 1, 'name' => 'Blue Shirt', 'category_name' => 'Shirts', 'selling_price' => 2000, 'stock_quantity' => 10, 'sale_unit' => 'item'];
 
         // Create the Cart
         $cart = new Cart();
@@ -193,7 +196,7 @@ class CartTest extends TestCase
     public function testClearCart(): void
     {
         // Example product
-        $productData = ['id' => 1, 'name' => 'Blue Shirt', 'selling_price' => 2000, 'stock_quantity' => 10, 'sale_unit' => 'item'];
+        $productData = ['id' => 1, 'name' => 'Blue Shirt', 'category_name' => 'Shirts', 'selling_price' => 2000, 'stock_quantity' => 10, 'sale_unit' => 'item'];
 
         // Create the Cart
         $cart = new Cart();
@@ -215,8 +218,8 @@ class CartTest extends TestCase
     public function testGetTotal(): void
     {
         // Example products
-        $productOne = ['id' => 1, 'name' => 'Blue Shirt', 'selling_price' => 2000, 'stock_quantity' => 10, 'sale_unit' => 'item'];
-        $productTwo = ['id' => 2, 'name' => 'Black Trousers', 'selling_price' => 3000, 'stock_quantity' => 10, 'sale_unit' => 'item'];
+        $productOne = ['id' => 1, 'name' => 'Blue Shirt', 'category_name' => 'Shirts', 'selling_price' => 2000, 'stock_quantity' => 10, 'sale_unit' => 'item'];
+        $productTwo = ['id' => 2, 'name' => 'Black Trousers', 'category_name' => 'Shirts', 'selling_price' => 3000, 'stock_quantity' => 10, 'sale_unit' => 'item'];
 
         // Create the Cart
         $cart = new Cart();
@@ -236,7 +239,7 @@ class CartTest extends TestCase
     public function testIsEmpty(): void
     {
         // Example product
-        $productData = ['id' => 1, 'name' => 'Blue Shirt', 'selling_price' => 2000, 'stock_quantity' => 10, 'sale_unit' => 'item'];
+        $productData = ['id' => 1, 'name' => 'Blue Shirt', 'category_name' => 'Shirts', 'selling_price' => 2000, 'stock_quantity' => 10, 'sale_unit' => 'item'];
 
         // Create the Cart
         $cart = new Cart();
@@ -255,8 +258,8 @@ class CartTest extends TestCase
     public function testGetItemCount(): void
     {
         // Example products
-        $productOne = ['id' => 1, 'name' => 'Blue Shirt', 'selling_price' => 2000, 'stock_quantity' => 10, 'sale_unit' => 'item'];
-        $productTwo = ['id' => 2, 'name' => 'Black Trousers', 'selling_price' => 3000, 'stock_quantity' => 10, 'sale_unit' => 'item'];
+        $productOne = ['id' => 1, 'name' => 'Blue Shirt', 'category_name' => 'Shirts', 'selling_price' => 2000, 'stock_quantity' => 10, 'sale_unit' => 'item'];
+        $productTwo = ['id' => 2, 'name' => 'Black Trousers', 'category_name' => 'Shirts', 'selling_price' => 3000, 'stock_quantity' => 10, 'sale_unit' => 'item'];
 
         // Create the Cart
         $cart = new Cart();
@@ -276,8 +279,8 @@ class CartTest extends TestCase
     public function testGetTotalQuantity(): void
     {
         // Example products
-        $productOne = ['id' => 1, 'name' => 'Blue Shirt', 'selling_price' => 2000, 'stock_quantity' => 10, 'sale_unit' => 'item'];
-        $productTwo = ['id' => 2, 'name' => 'Black Trousers', 'selling_price' => 3000, 'stock_quantity' => 10, 'sale_unit' => 'item'];
+        $productOne = ['id' => 1, 'name' => 'Blue Shirt', 'category_name' => 'Shirts', 'selling_price' => 2000, 'stock_quantity' => 10, 'sale_unit' => 'item'];
+        $productTwo = ['id' => 2, 'name' => 'Black Trousers', 'category_name' => 'Shirts', 'selling_price' => 3000, 'stock_quantity' => 10, 'sale_unit' => 'item'];
 
         // Create the Cart
         $cart = new Cart();
@@ -297,7 +300,7 @@ class CartTest extends TestCase
     public function testSaleTimerStartsWhenFirstProductAdded(): void
     {
         // Example product
-        $productData = ['id' => 1, 'name' => 'Blue Shirt', 'selling_price' => 2000, 'stock_quantity' => 10, 'sale_unit' => 'item'];
+        $productData = ['id' => 1, 'name' => 'Blue Shirt', 'category_name' => 'Shirts', 'selling_price' => 2000, 'stock_quantity' => 10, 'sale_unit' => 'item'];
 
         // Create the Cart
         $cart = new Cart();
